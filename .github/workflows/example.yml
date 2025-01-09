@@ -49,7 +49,8 @@ jobs:
       - name: run powershell
         run: |
           pwsh
-          Write-Host "hello from powershell"
+          ls
+          # Write-Host "hello from powershell"
           
           
           
