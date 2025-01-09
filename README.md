@@ -16,6 +16,7 @@ Simple blackjack web app hosted in Azure
 ## Infrastructure
 - Azure Container Repo hosts images
 - Azure Container Apps host backend
+- keyvault for certs?
 - load balancer?
 - waf?
 - iam roles?
