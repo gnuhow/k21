@@ -1,13 +1,26 @@
 # k21
 Simple blackjack web app hosted in Azure
 
-github > Azure DevOps > bicep > Azure infra
-github > Azure DevOps > Container build > Azure Container Repo
+## Infra deploy
+- github
+- Azure DevOps
+- bicep
+- Azure infra
 
-Azure Container Repo
-Azure Container Apps
+## Container image deploy
+- github
+- Azure DevOps
+- Container build
+- Azure Container Repo
 
+## Infrastructure
+- Azure Container Repo hosts images
+- Azure Container Apps host backend
+- load balancer?
+- waf?
+- iam roles?
 
-Node.JS backend, default HTTP lib
-Frontend code modified in place by the backend.
-Normal JS/HTML/CSS frontend
+## App
+- Node.JS backend, default HTTP lib
+- Frontend code modified in place by the backend.
+- Normal JS/HTML/CSS frontend
