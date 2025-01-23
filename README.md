@@ -2,15 +2,11 @@
 Simple blackjack web app hosted in Azure
 
 ## Infra deploy
-- github
-- github actions
-- bicep
-- Azure infra
+- deploy VM
+- terraform
 
 ## Container image deploy
-- github
-- github actions
-- Container build
+- local buildah
 - Azure Container Repo
 
 ## Infrastructure
