@@ -20,10 +20,10 @@ stages:
     - script: |
         echo 'Hello World'
 
-- stage: tf
+- stage: tf_validate
   jobs:
-  - job: tf
-    displayName: tf
+  - job: tf_validate
+    displayName: TF Validate
     steps:
       - task: TerraformInstaller@1
         inputs:
@@ -46,19 +46,25 @@ stages:
           cd terraform
           terraform validate
 
-      - script:
+- stage: tf_plan
+  jobs:
+  - job: tf_plan
+    displayName: TF Validate
+    steps:
+      - task: TerraformInstaller@1
+        inputs:
+          terraformVersion: '1.10.5'
+
+      - task: TerraformTaskV4@4
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          backendServiceArm: k21-devops
+          backendAzureRmStorageAccountName: k21devops
+          backendAzureRmContainerName: azure-devops
+          backendAzureRmKey: terraform/terraform.tfstate
+          backendAzureRmResourceGroupName: k21
+      - script: |
           cd terraform
           terraform init
           terraform plan
-# - stage: Validate
-#   displayName: TF validate
-#   jobs:
-#   - job: TfValidate
-#     displayName: TF validate
-#     steps:
-#     - task: TerraformInstaller@0
-#       inputs:
-#         terraformVersion: latest
-    
-#     - script: |
-#         terraform --version
