@@ -3,7 +3,7 @@
         "roleName": "azure-deploy",
         "description": "Azure Deploy role",
         "assignableScopes": [
-            "/subscriptions/XXX"
+            "/subscriptions/<subscription id>"
         ],
         "permissions": [
             {
