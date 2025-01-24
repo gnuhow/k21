@@ -10,11 +10,27 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+stages:
+- stage: HelloWorld
+  displayName: 'Hello World'
+  jobs:
+  - job: HelloWorld
+    displayName: 'Hello World'
+    steps:
+    - script: |
+        echo 'Hello World'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+
+- stage: Validate
+  displayName: 'TF validate'
+  jobs:
+  - job: TfValidate
+    displayName: 'TF validate'
+    steps:
+    - task: TerraformInstaller@0
+      inputs:
+        terraformVersion: 'latest'
+    
+    - script: |
+      terraform --version
+    
