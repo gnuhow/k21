@@ -37,6 +37,7 @@ stages:
           backendAzureRmStorageAccountName: k21devops
           backendAzureRmContainerName: azure-devops
           backendAzureRmKey: terraform/terraform.tfstate
+          backendAzureRmResourceGroupName: k21
 
       - script: |
           terraform --version
