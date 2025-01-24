@@ -43,9 +43,12 @@ stages:
           terraform --version
 
       - script: |
+          cd terraform
           terraform validate
 
       - script:
+          cd terraform
+          terraform init
           terraform plan
 # - stage: Validate
 #   displayName: TF validate
