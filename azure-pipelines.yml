@@ -34,6 +34,7 @@ stages:
           provider: 'azurerm'
           command: 'init'
           backendServiceArm: k21-devops
+          backendAzureRmStorageAccountName: k21devops
 
       - script: |
           terraform --version
