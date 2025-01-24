@@ -27,7 +27,7 @@ stages:
     steps:
       - task: TerraformInstaller@1
         inputs:
-          terraformVersion: '1.10.4'
+          terraformVersion: '1.10.5'
 
       - task: TerraformTaskV4@4
         inputs:
@@ -41,6 +41,12 @@ stages:
 
       - script: |
           terraform --version
+
+      - script: |
+          terraform validate
+
+      - script:
+          terraform plan
 # - stage: Validate
 #   displayName: TF validate
 #   jobs:
