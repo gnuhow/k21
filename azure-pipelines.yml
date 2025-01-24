@@ -27,12 +27,13 @@ stages:
     steps:
       - task: TerraformInstaller@1
         inputs:
-          terraformVersion: 'latest'
+          terraformVersion: '1.10.4'
 
       - task: TerraformTaskV4@4
         inputs:
           provider: 'azurerm'
           command: 'init'
+          backendServiceArm: k21-devops
 
       - script: |
           terraform --version
