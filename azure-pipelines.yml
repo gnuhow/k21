@@ -12,24 +12,35 @@ pool:
 
 stages:
 - stage: HelloWorld
-  displayName: 'Hello World'
+  displayName: Hello World
   jobs:
   - job: HelloWorld
-    displayName: 'Hello World'
+    displayName: Hello World
     steps:
     - script: |
         echo 'Hello World'
 
-
-- stage: Validate
-  displayName: 'TF validate'
+- stage: tf
   jobs:
-  - job: TfValidate
-    displayName: 'TF validate'
-    steps:
-    - task: TerraformInstaller@0
+  - job: tf
+    displayName: tf
+    - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+
+# - stage: Validate
+#   displayName: TF validate
+#   jobs:
+#   - job: TfValidate
+#     displayName: TF validate
+#     steps:
+#     - task: TerraformInstaller@0
+#       inputs:
+#         terraformVersion: latest
     
-    - script: |
-        terraform --version
+#     - script: |
+#         terraform --version
