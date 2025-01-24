@@ -20,7 +20,7 @@ stages:
     - script: |
         echo 'Hello World'
 
-- stage: tf_validate
+- stage: Validate
   jobs:
   - job: tf_validate
     displayName: TF Validate
@@ -44,12 +44,13 @@ stages:
 
       - script: |
           cd terraform
+          terraform init
           terraform validate
 
-- stage: tf_plan
+- stage: Plan
   jobs:
   - job: tf_plan
-    displayName: TF Validate
+    displayName: TF Plan
     steps:
       - task: TerraformInstaller@1
         inputs:
