@@ -2,8 +2,10 @@
 Simple blackjack web app hosted in Azure
 
 ## Infra deploy
-- deploy VM
+- github
+- github actions
 - terraform
+- Azure infra
 
 ## Container image deploy
 - local buildah
@@ -21,3 +23,4 @@ Simple blackjack web app hosted in Azure
 - Node.JS backend, default HTTP lib
 - Frontend code modified in place by the backend.
 - Normal JS/HTML/CSS frontend
+

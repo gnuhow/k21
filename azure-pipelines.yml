@@ -2,6 +2,7 @@
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
+# try again
 
 trigger:
 - main
@@ -9,11 +10,42 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+stages:
+- stage: HelloWorld
+  displayName: Hello World
+  jobs:
+  - job: HelloWorld
+    displayName: Hello World
+    steps:
+    - script: |
+        echo 'Hello World'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- stage: tf
+  jobs:
+  - job: tf
+    displayName: tf
+    steps:
+      - task: TerraformInstaller@1
+        inputs:
+          terraformVersion: '1.10.4'
+
+      - task: TerraformTaskV4@4
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          backendServiceArm: k21-devops
+
+      - script: |
+          terraform --version
+# - stage: Validate
+#   displayName: TF validate
+#   jobs:
+#   - job: TfValidate
+#     displayName: TF validate
+#     steps:
+#     - task: TerraformInstaller@0
+#       inputs:
+#         terraformVersion: latest
+    
+#     - script: |
+#         terraform --version
