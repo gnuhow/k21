@@ -24,17 +24,18 @@ stages:
   jobs:
   - job: tf
     displayName: tf
-    - task: TerraformInstaller@1
-      inputs:
-        terraformVersion: 'latest'
+    steps:
+      - task: TerraformInstaller@1
+        inputs:
+          terraformVersion: 'latest'
 
-    - task: TerraformTaskV4@4
-      inputs:
-        provider: 'azurerm'
-        command: 'init'
+      - task: TerraformTaskV4@4
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
 
-    - script: |
-        terraform --version
+      - script: |
+          terraform --version
 # - stage: Validate
 #   displayName: TF validate
 #   jobs:
