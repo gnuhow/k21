@@ -32,5 +32,4 @@ stages:
         terraformVersion: 'latest'
     
     - script: |
-      terraform --version
-    
+        terraform --version
