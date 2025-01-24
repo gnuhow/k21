@@ -16,8 +16,13 @@
         - Create a service connection in Azure Devops, but dont finish it.
             - check apply to all pipelines
         - Assign the role to the managed identity.
+- Manually create Azure Storage account for terraform
 
-- Setup CI/CD files.
+- install terraform into Azure DevOps
+    - https://marketplace.visualstudio.com/items?itemName=ms-devlabs.custom-terraform-tasks
+    - 
+
+- Azure DevOps CI/CD files.
     - https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/add-template-to-azure-pipelines?tabs=CLI
 
 
