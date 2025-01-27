@@ -4,6 +4,7 @@
 # So, I decided to use a deployment host instead.
 # RHEL 9 Host VM in VirtualBox
 project_name=k21
+project_name_lower=k21
 
 # Install Azure CLI
 # https://developer.hashicorp.com/terraform/tutorials/azure-get-started/azure-build
@@ -29,3 +30,23 @@ sudo echo "export ARM_TENANT_ID=$(echo $service_principal_info | jq -r .tenant)"
 ## tf deploy
 az login
 
+
+# run node app local
+sudo node container/app.js
+curl http://localhost:80
+
+
+# use buildah for making container images, with rootless support
+# use podman to run container images
+dnf install -y buildah podman
+setsebool -P container_manage_cgroup 1
+
+firewall-cmd --permanent --add-port=80/tcp
+firewall-cmd --permanent --add-port=8080/tcp
+semanage port -a -t http_port_t -p tcp 8080
+
+# run images locally for testing
+cd container
+buildah build --format=docker -t k21:1.01 .
+podman run -p 8080:8080 -it localhost/k21:1.01 ash  # live terminal
+podman run -d -p 8080:8080 localhost/k21:1.01       # background mode
