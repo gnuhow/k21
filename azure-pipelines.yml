@@ -91,6 +91,5 @@ stages:
         inputs:
           provider: azurerm
           command: plan
-          commandOptions: '-out main.tfplan'
+          commandOptions: '-chdir=terraform -out main.tfplan -var test_var=$(TF_VAR_TEST_VAR)'
           environmentServiceNameAzureRM: k21-devops
-          test_var: $(TF_VAR_TEST_VAR)
