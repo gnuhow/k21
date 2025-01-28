@@ -28,7 +28,6 @@ stages:
       - task: TerraformInstaller@1
         inputs:
           terraformVersion: '1.10.5'
-
       - task: TerraformTaskV4@4
         inputs:
           provider: 'azurerm'
@@ -38,11 +37,10 @@ stages:
           backendAzureRmContainerName: azure-devops
           backendAzureRmKey: terraform/terraform.tfstate
           backendAzureRmResourceGroupName: k21
-
       - script: |
-          G='\033[0;32m'
+          C='\033[0;33m'
 
-          echo "$G terraform --version"
+          echo -e "${C}terraform --version"
           terraform --version
           
           export TF_VAR_subscription_id=$(echo -n $SUBSCRIPTION_ID)
@@ -50,7 +48,7 @@ stages:
           cd terraform
           terraform init
           
-          echo -e "$G terraform validate"
+          echo -e "${C}terraform validate"
           terraform validate
 
 - stage: Plan
@@ -61,7 +59,6 @@ stages:
       - task: TerraformInstaller@1
         inputs:
           terraformVersion: '1.10.5'
-
       - task: TerraformTaskV4@4
         inputs:
           provider: 'azurerm'
@@ -72,7 +69,13 @@ stages:
           backendAzureRmKey: terraform/terraform.tfstate
           backendAzureRmResourceGroupName: k21
       - script: |
+          C='\033[0;33m'
+
+          echo "TF_VAR_test_var: ${TF_VAR_test_var}"
           export TF_VAR_subscription_id=$(echo -n $SUBSCRIPTION_ID)
+
           cd terraform
           terraform init
+
+          echo -e "${C}terraform plan"
           terraform plan
