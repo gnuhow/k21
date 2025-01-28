@@ -40,10 +40,17 @@ stages:
           backendAzureRmResourceGroupName: k21
 
       - script: |
-          terraform --version && echo !!
+          G='\033[0;32m'
+
+          echo "$G terraform --version"
+          terraform --version
+          
           export TF_VAR_subscription_id=$(echo -n $SUBSCRIPTION_ID)
+          
           cd terraform
           terraform init
+          
+          echo -e "$G terraform validate"
           terraform validate
 
 - stage: Plan

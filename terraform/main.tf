@@ -8,6 +8,9 @@ terraform {
 }
 
 
+variable "subscription_id" {}
+
+
 provider "azurerm" {
   resource_provider_registrations = "none"
   subscription_id = var.subscription_id
@@ -15,20 +18,15 @@ provider "azurerm" {
 }
 
 
-variable "subscription_id" {
-
+variable "azure_region" {
+  type = string
+  default = "centralus"
 }
 
 
 variable "project_name" {
   type = string
   default = "k21"
-}
-
-
-variable "azure_region" {
-  type = string
-  default = "US Central"
 }
 
 
