@@ -1,2 +1,3 @@
-save subscription ID in azure devops
-import subscription ID into TF secrets somehow
+Fix Terraform task
+Make terrform task change directory properly on validate
+https://github.com/microsoft/azure-pipelines-terraform/tree/main/Tasks/TerraformTask/TerraformTaskV4

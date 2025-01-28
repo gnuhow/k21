@@ -44,10 +44,11 @@ stages:
       - task: TerraformTaskV4@4
         name: terraformValidate
         displayName: Validate Terraform
+        workingDirectory: terraform
         inputs:
           provider: 'azurerm'
           command: 'validate'
-          commandOptions: '-chdir=terraform -var test_var=$(TF_VAR_TEST_VAR)'
+          # commandOptions: '-var test_var=$(TF_VAR_TEST_VAR)'
 
       # - script: |
       #     C='\033[0;33m'
