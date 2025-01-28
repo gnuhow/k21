@@ -20,41 +20,10 @@ stages:
 #     - script: |
 #         echo 'Hello World'
 
-- stage: Validate
+- stage: Terraform
   jobs:
-  - job: tf_validate
-    displayName: TF Validate
-    steps:
-      - task: TerraformInstaller@1
-        inputs:
-          terraformVersion: $(TERRAFORM_VERSION)
-      - task: TerraformTaskV4@4
-        inputs:
-          provider: 'azurerm'
-          command: 'init'
-          backendServiceArm: k21-devops
-          backendAzureRmStorageAccountName: k21devops
-          backendAzureRmContainerName: azure-devops
-          backendAzureRmKey: terraform/terraform.tfstate
-          backendAzureRmResourceGroupName: k21
-      - script: |
-          C='\033[0;33m'
-
-          echo -e "${C}terraform --version"
-          terraform --version
-          
-          export TF_VAR_subscription_id=$(echo -n $SUBSCRIPTION_ID)
-          
-          cd terraform
-          terraform init
-          
-          echo -e "${C}terraform validate"
-          terraform validate
-
-- stage: Plan
-  jobs:
-  - job: tf_plan
-    displayName: TF Plan
+  - job: Terraform
+    displayName: Terraform
     steps:
       - task: TerraformInstaller@1
         inputs:
@@ -72,18 +41,26 @@ stages:
           backendAzureRmKey: terraform/terraform.tfstate
           backendAzureRmResourceGroupName: k21
 
-      - script: |
-          C='\033[0;33m'
+      - task: TerraformTaskV4@4
+        name: terraformValidate
+        displayName: Validate Terraform
+        inputs:
+          provider: 'azurerm'
+          command: 'validate'
+          commandOptions: '-chdir=terraform -var test_var=$(TF_VAR_TEST_VAR)'
 
-          # echo "TF_VAR_test_var: $(TF_VAR_TEST_VAR)"
-          export TF_VAR_azure_subscription_id=$(echo -n "$(AZURE_SUBSCRIPTION_ID)")
-          export TF_VAR_azure_tenant_id=$(echo -n "$(AZURE_TENANT_ID)")
+      # - script: |
+      #     C='\033[0;33m'
 
-          # cd terraform
-          # terraform init
+      #     echo "TF_VAR_test_var: $(TF_VAR_TEST_VAR)"
+      #     export TF_VAR_azure_subscription_id=$(echo -n "$(AZURE_SUBSCRIPTION_ID)")
+      #     export TF_VAR_azure_tenant_id=$(echo -n "$(AZURE_TENANT_ID)")
 
-          # echo -e "${C}terraform plan"
-          # terraform plan
+      #     cd terraform
+      #     terraform init
+
+      #     echo -e "${C}terraform plan"
+      #     terraform plan
 
       - task: TerraformTaskV4@4
         name: terraformPlan
