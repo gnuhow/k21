@@ -8,12 +8,20 @@ terraform {
 }
 
 
-variable "subscription_id" {}
+variable "azure_subscription_id" {
+  type = string
+}
+
+
+variable "azure_tenant_id" {
+  type = string
+}
 
 
 provider "azurerm" {
   resource_provider_registrations = "none"
-  subscription_id = var.subscription_id
+  subscription_id = var.azure_subscription_id
+  tenant_id = var.azure_tenant_id
   features {}
 }
 
