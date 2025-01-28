@@ -40,9 +40,7 @@ stages:
           backendAzureRmResourceGroupName: k21
 
       - script: |
-          terraform --version
-
-      - script: |
+          terraform --version && echo !!
           export TF_VAR_subscription_id=$(echo -n $SUBSCRIPTION_ID)
           cd terraform
           terraform init
@@ -67,6 +65,7 @@ stages:
           backendAzureRmKey: terraform/terraform.tfstate
           backendAzureRmResourceGroupName: k21
       - script: |
+          export TF_VAR_subscription_id=$(echo -n $SUBSCRIPTION_ID)
           cd terraform
           terraform init
           terraform plan
