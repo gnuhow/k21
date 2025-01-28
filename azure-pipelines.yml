@@ -43,6 +43,7 @@ stages:
           terraform --version
 
       - script: |
+          export TF_VAR_subscription_id=$(echo -n $SUBSCRIPTION_ID)
           cd terraform
           terraform init
           terraform validate
