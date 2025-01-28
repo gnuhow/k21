@@ -71,8 +71,8 @@ stages:
       - script: |
           C='\033[0;33m'
 
-          echo "TF_VAR_test_var: ${TF_VAR_test_var}"
-          export TF_VAR_subscription_id=$(echo -n $SUBSCRIPTION_ID)
+          echo "TF_VAR_test_var: $({ TF_VAR_test_var })"
+          export TF_VAR_subscription_id=$(echo -n "?")
 
           cd terraform
           terraform init
