@@ -47,6 +47,10 @@ semanage port -a -t http_port_t -p tcp 8080
 
 # run images locally for testing
 cd container
-buildah build --format=docker -t k21:1.01 .
-podman run -p 8080:8080 -it localhost/k21:1.01 ash  # live terminal
-podman run -d -p 8080:8080 localhost/k21:1.01       # background mode
+version=1.01
+
+
+buildah build -t "$project_name:$version" . # --format=docker 
+podman run -p 8080:8080 -it "localhost/$project_name:$version"  ash     # live terminal
+podman run -d -p 8080:8080 "localhost/$project_name:$version"           # background mode
+
