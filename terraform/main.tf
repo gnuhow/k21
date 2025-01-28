@@ -38,8 +38,8 @@ variable "project_name" {
 }
 
 
-resource "azurerm_resource_group" "test" {
-  name     = join("-", [var.project_name, "test"])
+resource "azurerm_resource_group" "app" {
+  name     = join("-", [var.project_name, "app"])
   location = var.azure_region
 
   tags = {

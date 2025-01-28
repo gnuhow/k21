@@ -11,14 +11,14 @@ pool:
   vmImage: ubuntu-latest
 
 stages:
-- stage: HelloWorld
-  displayName: Hello World
-  jobs:
-  - job: HelloWorld
-    displayName: Hello World
-    steps:
-    - script: |
-        echo 'Hello World'
+# - stage: HelloWorld
+#   displayName: Hello World
+#   jobs:
+#   - job: HelloWorld
+#     displayName: Hello World
+#     steps:
+#     - script: |
+#         echo 'Hello World'
 
 - stage: Validate
   jobs:
@@ -27,7 +27,7 @@ stages:
     steps:
       - task: TerraformInstaller@1
         inputs:
-          terraformVersion: '1.10.5'
+          terraformVersion: $(TERRAFORM_VERSION)
       - task: TerraformTaskV4@4
         inputs:
           provider: 'azurerm'
@@ -58,8 +58,11 @@ stages:
     steps:
       - task: TerraformInstaller@1
         inputs:
-          terraformVersion: '1.10.5'
+          terraformVersion: $(TERRAFORM_VERSION)
+
       - task: TerraformTaskV4@4
+        name: terraformInit
+        displayName: Initialize terraform
         inputs:
           provider: 'azurerm'
           command: 'init'
@@ -68,15 +71,26 @@ stages:
           backendAzureRmContainerName: azure-devops
           backendAzureRmKey: terraform/terraform.tfstate
           backendAzureRmResourceGroupName: k21
+
       - script: |
           C='\033[0;33m'
 
-          echo "TF_VAR_test_var: $(TF_VAR_TEST_VAR)"
+          # echo "TF_VAR_test_var: $(TF_VAR_TEST_VAR)"
           export TF_VAR_azure_subscription_id=$(echo -n "$(AZURE_SUBSCRIPTION_ID)")
           export TF_VAR_azure_tenant_id=$(echo -n "$(AZURE_TENANT_ID)")
 
-          cd terraform
-          terraform init
+          # cd terraform
+          # terraform init
 
-          echo -e "${C}terraform plan"
-          terraform plan
+          # echo -e "${C}terraform plan"
+          # terraform plan
+
+      - task: TerraformTaskV4@4
+        name: terraformPlan
+        displayName: Terraform Plan
+        inputs:
+          provider: azurerm
+          command: plan
+          commandOptions: '-out main.tfplan'
+          environmentServiceNameAzureRM: k21-devops
+          test_var: $(TF_VAR_TEST_VAR)
