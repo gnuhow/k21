@@ -48,6 +48,6 @@ resource "azurerm_resource_group" "app" {
   location = var.azure_region
 
   tags = {
-    project = "k21"
+    project = var.project_name
   }
 }

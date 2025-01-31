@@ -74,3 +74,14 @@ stages:
           environmentServiceNameAzureRM: k21-devops
           workingDirectory: terraform
  
+      # Only runs if the 'terraformPlan' task has detected changes the in state. 
+      - task: TerraformTaskV4@4
+        name: terraformApply
+        displayName: Terraform Apply
+        condition: and(succeeded(), eq(variables['terraformPlan.changesPresent'], 'true'))
+        inputs:
+          provider: azurerm
+          command: apply
+          commandOptions: main.tfplan
+          environmentServiceNameAzureRM: k21-devops
+          workingDirectory: terraform
