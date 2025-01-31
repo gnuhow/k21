@@ -1,3 +1,4 @@
 Fix Terraform task
-Make terrform task change directory properly on validate
-https://github.com/microsoft/azure-pipelines-terraform/tree/main/Tasks/TerraformTask/TerraformTaskV4
+Terraform isn't storing the state properly, i need to add some way to store and retrieve tf.state files.
+Fix Storage account access
+Add storage account container
