@@ -70,7 +70,7 @@ stages:
         inputs:
           provider: azurerm
           command: plan
-          commandOptions: '-out main.tfplan -var test_var=$(TF_VAR_TEST_VAR)'
+          commandOptions: '-out main.tfplan -var azure_subscription_id=$(AZURE_SUBSCRIPTION_ID) -var test_var=$(TF_VAR_TEST_VAR)'
           environmentServiceNameAzureRM: k21-devops
           workingDirectory: terraform
  
