@@ -38,7 +38,7 @@ stages:
           backendServiceArm: k21-devops
           backendAzureRmStorageAccountName: k21devops
           backendAzureRmContainerName: k21-devops
-          backendAzureRmKey: terraform/terraform.tfstate
+          backendAzureRmKey: terraform.tfstate
           backendAzureRmResourceGroupName: k21
           workingDirectory: terraform
 
