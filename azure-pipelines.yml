@@ -44,10 +44,10 @@ stages:
       - task: TerraformTaskV4@4
         name: terraformValidate
         displayName: Validate Terraform
-        workingDirectory: terraform
         inputs:
           provider: azurerm
           command: validate
+          workingDirectory: terraform
           # commandOptions: '-var test_var=$(TF_VAR_TEST_VAR)'
 
       # - script: |
@@ -66,10 +66,10 @@ stages:
       - task: TerraformTaskV4@4
         name: terraformPlan
         displayName: Terraform Plan
-        workingDirectory: terraform
         inputs:
           provider: azurerm
           command: plan
           commandOptions: '-out main.tfplan -var test_var=$(TF_VAR_TEST_VAR)'
           environmentServiceNameAzureRM: k21-devops
+          workingDirectory: terraform
  
