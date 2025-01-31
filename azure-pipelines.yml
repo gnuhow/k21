@@ -40,6 +40,7 @@ stages:
           backendAzureRmContainerName: azure-devops
           backendAzureRmKey: terraform/terraform.tfstate
           backendAzureRmResourceGroupName: k21
+          workingDirectory: terraform
 
       - task: TerraformTaskV4@4
         name: terraformValidate
