@@ -54,7 +54,7 @@ resource "azurerm_resource_group" "app" {
 
 
 resource "azurerm_container_registry" "acr" {
-  name                = "k21"
+  name                = join("-", [var.project_name, "registry"])
   resource_group_name = azurerm_resource_group.app.name
   location            = var.azure_region
   sku                 = "Basic"
