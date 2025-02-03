@@ -67,6 +67,7 @@ stages:
       - task: TerraformTaskV4@4
         name: terraformPlan
         displayName: Terraform Plan
+        condition: eq(variables['doDestroy'], 'false')
         inputs:
           provider: azurerm
           command: plan
@@ -87,12 +88,23 @@ stages:
           workingDirectory: terraform
 
       - task: TerraformTaskV4@4
+        name: terraformPlanDestroy
+        displayName: Terraform Plan for Destruction
+        condition: eq(variables['doDestroy'], 'false')
+        inputs:
+          provider: azurerm
+          command: plan
+          commandOptions: '-destroy -out main.tfplan'
+          environmentServiceNameAzureRM: k21-devops
+          workingDirectory: terraform
+
+      - task: TerraformTaskV4@4
         name: terraformDestroy
         displayName: Terraform Destroy
         condition: eq(variables['doDestroy'], 'true')
         inputs:
           provider: azurerm
           command: destroy
-          commandOptions: main.tfplan
+          # commandOptions: main.tfplan
           environmentServiceNameAzureRM: k21-devops
           workingDirectory: terraform
