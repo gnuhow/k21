@@ -87,8 +87,8 @@ stages:
           workingDirectory: terraform
 
       - task: TerraformTaskV4@4
-        name: terraformApply
-        displayName: Terraform Apply
+        name: terraformDestroy
+        displayName: Terraform Destroy
         condition: eq(variables['doDestroy'], 'true')
         inputs:
           provider: azurerm
