@@ -24,7 +24,7 @@ variable "test_var" {
 
 
 provider "azurerm" {
-  # resource_provider_registrations = "none"
+  resource_provider_registrations = "none"
   subscription_id = var.azure_subscription_id
   tenant_id = var.azure_tenant_id
   features {}
