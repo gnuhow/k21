@@ -4,6 +4,10 @@
 # https://aka.ms/yaml
 # try again
 
+variables:
+- name: storageAccountName
+  value: k21devops
+
 trigger:
 - main
 
@@ -36,7 +40,7 @@ stages:
           provider: azurerm
           command: init
           backendServiceArm: k21-devops
-          backendAzureRmStorageAccountName: k21devops
+          backendAzureRmStorageAccountName: $(storageAccountName)
           backendAzureRmContainerName: k21-devops
           backendAzureRmKey: 'terraform.tfstate'
           backendAzureRmResourceGroupName: k21
@@ -90,7 +94,7 @@ stages:
       - task: TerraformTaskV4@4
         name: terraformPlanDestroy
         displayName: Terraform Plan for Destruction
-        condition: eq(variables['doDestroy'], 'false')
+        condition: eq(variables['doDestroy'], 'true')
         inputs:
           provider: azurerm
           command: plan
@@ -108,3 +112,16 @@ stages:
           # commandOptions: main.tfplan
           environmentServiceNameAzureRM: k21-devops
           workingDirectory: terraform
+
+      - name: uploadState
+        displayName: Upload Terraform State
+        inputs:
+          backendAzureRmStorageAccountName: $(storageAccountName)
+          backendAzureRmContainerName: k21-devops
+          backendAzureRmKey: 'terraform.tfstate'
+          backendAzureRmResourceGroupName: k21
+        script: | 
+          ls
+          echo $backendAzureRmStorageAccountName
+          az storage container list
+
