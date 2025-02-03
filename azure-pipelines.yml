@@ -6,7 +6,7 @@
 
 variables:
 - name: doDestroy
-  value: false
+  value: true
 - name: storageAccountName
   value: k21devops
 
@@ -73,7 +73,7 @@ stages:
       - task: TerraformTaskV4@4
         name: terraformPlan
         displayName: Terraform Plan
-        condition: eq(variables['doDestroy'], 'false')
+        condition: eq(variables['doDestroy'], false)
         inputs:
           provider: azurerm
           command: plan
@@ -85,7 +85,7 @@ stages:
       - task: TerraformTaskV4@4
         name: terraformApply
         displayName: Terraform Apply
-        condition: and(succeeded(), eq(variables['terraformPlan.changesPresent'], 'true'), eq(variables['doDestroy'], 'false'))
+        condition: and(succeeded(), eq(variables['terraformPlan.changesPresent'], 'true'), eq(variables['doDestroy'], false))
         inputs:
           provider: azurerm
           command: apply
@@ -96,7 +96,7 @@ stages:
       - task: TerraformTaskV4@4
         name: terraformPlanDestroy
         displayName: Terraform Plan for Destruction
-        condition: eq(variables['doDestroy'], 'true')
+        condition: eq(variables['doDestroy'], true)
         inputs:
           provider: azurerm
           command: plan
@@ -107,7 +107,7 @@ stages:
       - task: TerraformTaskV4@4
         name: terraformDestroy
         displayName: Terraform Destroy
-        condition: eq(variables['doDestroy'], 'true')
+        condition: eq(variables['doDestroy'], true)
         inputs:
           provider: azurerm
           command: destroy
