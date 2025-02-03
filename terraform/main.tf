@@ -1,34 +1,34 @@
-# terraform {
-#   required_providers {
-#     azurerm = {
-#       source  = "hashicorp/azurerm"
-#       version = "=4.16.0"
-#     }
-#   }
-# }
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "=4.16.0"
+    }
+  }
+}
 
 
-# variable "azure_subscription_id" {
-#   type = string
-# }
+variable "azure_subscription_id" {
+  type = string
+}
 
 
-# variable "azure_tenant_id" {
-#   type = string
-# }
+variable "azure_tenant_id" {
+  type = string
+}
 
 
-# variable "test_var" {
-#   type = string
-# }
+variable "test_var" {
+  type = string
+}
 
 
-# provider "azurerm" {
-#   resource_provider_registrations = "none"
-#   subscription_id = var.azure_subscription_id
-#   tenant_id = var.azure_tenant_id
-#   features {}
-# }
+provider "azurerm" {
+  # resource_provider_registrations = "none"
+  subscription_id = var.azure_subscription_id
+  tenant_id = var.azure_tenant_id
+  features {}
+}
 
 
 variable "azure_region" {
