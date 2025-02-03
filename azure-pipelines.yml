@@ -78,7 +78,7 @@ stages:
       - task: TerraformTaskV4@4
         name: terraformApply
         displayName: Terraform Apply
-        condition: and(succeeded(), eq(variables['terraformPlan.changesPresent'], 'true'), eq(variables['doDelete'], 'false'))
+        condition: and(succeeded(), eq(variables['terraformPlan.changesPresent'], 'true'), eq(variables['doDestroy'], 'false'))
         inputs:
           provider: azurerm
           command: apply
@@ -89,7 +89,7 @@ stages:
       - task: TerraformTaskV4@4
         name: terraformApply
         displayName: Terraform Apply
-        condition: eq(variables['doDelete'], 'true'))
+        condition: eq(variables['doDestroy'], 'true')
         inputs:
           provider: azurerm
           command: destroy
