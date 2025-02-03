@@ -5,6 +5,8 @@
 # try again
 
 variables:
+- name: doDestroy
+  value: false
 - name: storageAccountName
   value: k21devops
 
@@ -113,15 +115,10 @@ stages:
           environmentServiceNameAzureRM: k21-devops
           workingDirectory: terraform
 
-      - name: uploadState
-        displayName: Upload Terraform State
-        inputs:
-          backendAzureRmStorageAccountName: $(storageAccountName)
-          backendAzureRmContainerName: k21-devops
-          backendAzureRmKey: 'terraform.tfstate'
-          backendAzureRmResourceGroupName: k21
-        script: | 
+      - script: | 
           ls
           echo $backendAzureRmStorageAccountName
           az storage container list
+        name: uploadState
+        displayName: Upload Terraform State
 
