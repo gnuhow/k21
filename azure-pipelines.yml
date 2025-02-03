@@ -70,7 +70,12 @@ stages:
         inputs:
           provider: azurerm
           command: plan
-          commandOptions: '-out main.tfplan' #-var azure_tenant_id=$(AZURE_TENANT_ID) -var azure_subscription_id=$(AZURE_SUBSCRIPTION_ID) -var test_var=$(TF_VAR_TEST_VAR)'
+          backendServiceArm: k21-devops
+          backendAzureRmStorageAccountName: k21devops
+          backendAzureRmContainerName: k21-devops
+          backendAzureRmKey: 'terraform.tfstate'
+          backendAzureRmResourceGroupName: k21
+          commandOptions: '-out main.tfplan -var azure_tenant_id=$(AZURE_TENANT_ID) -var azure_subscription_id=$(AZURE_SUBSCRIPTION_ID) -var test_var=$(TF_VAR_TEST_VAR)'
           environmentServiceNameAzureRM: k21-devops
           workingDirectory: terraform
  

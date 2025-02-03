@@ -5,3 +5,13 @@ fix terraform init error terraform init -backend-config=<nothing>
 Fix Authentication by reading source, line 16.
     https://github.com/microsoft/azure-pipelines-terraform/blob/main/Tasks/TerraformTask/TerraformTaskV4/src/azure-terraform-command-handler.ts
 
+/opt/hostedtoolcache/terraform/1.10.5/x64/terraform init 
+    -backend-config=storage_account_name=k21devops 
+    -backend-config=container_name=k21-devops 
+    -backend-config=key=terraform.tfstate
+    -backend-config=resource_group_name=k21 
+    -backend-config=subscription_id=*** 
+    -backend-config=tenant_id=*** 
+    -backend-config=client_id=*** 
+    -backend-config=oidc_token=*** 
+    -backend-config=use_oidc=true
