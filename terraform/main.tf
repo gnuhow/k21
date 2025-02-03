@@ -18,13 +18,8 @@ variable "azure_tenant_id" {
 }
 
 
-variable "test_var" {
-  type = string
-}
-
-
 provider "azurerm" {
-  resource_provider_registrations = "none"
+  resource_provider_registrations = "extended"
   subscription_id = var.azure_subscription_id
   tenant_id = var.azure_tenant_id
   features {}
