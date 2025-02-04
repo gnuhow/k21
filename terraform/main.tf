@@ -58,16 +58,16 @@ resource "azurerm_resource_group" "app" {
 }
 
 
-# resource "azurerm_container_registry" "acr" {
-#   name                = join("", [var.project_name, "Registry"])
-#   resource_group_name = azurerm_resource_group.app.name
-#   location            = var.azure_region
-#   sku                 = "Basic"
-#   admin_enabled       = false
-#   public_network_access_enabled = true    # only public access supported with basic plan
-#   anonymous_pull_enabled = false
+resource "azurerm_container_registry" "acr" {
+  name                = join("", [var.project_name, "Registry"])
+  resource_group_name = azurerm_resource_group.app.name
+  location            = var.azure_region
+  sku                 = "Basic"
+  admin_enabled       = false
+  public_network_access_enabled = true    # only public access supported with basic plan
+  anonymous_pull_enabled = false
 
-#   tags = {
-#     project = var.project_name
-#   }
-# }
+  tags = {
+    project = var.project_name
+  }
+}
