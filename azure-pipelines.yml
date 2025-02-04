@@ -84,18 +84,19 @@ stages:
       - task: TerraformTaskV4@4
         name: terraformDestroy
         displayName: Terraform Destroy
-        condition: eq(variables['doDestroy'], true)
+        condition: eq(variables['doDestroy'], true)        env:
+          TF_LOG: INFO
         inputs:
           provider: azurerm
           command: destroy
           environmentServiceNameAzureRM: k21-devops
           workingDirectory: terraform
 
-      - script: | 
-          ls terraform
-          # echo $(storageAccountName)
-          # az storage container list --account-name $(storageAccountName)
-          # az storage blob list --account-name $(storageAccountName) --container-name k21devops
-        name: state
-        displayName: Terraform State
+      # - script: | 
+      #     ls terraform
+      #     # echo $(storageAccountName)
+      #     # az storage container list --account-name $(storageAccountName)
+      #     # az storage blob list --account-name $(storageAccountName) --container-name k21devops
+      #   name: state
+      #   displayName: Terraform State
 
