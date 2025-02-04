@@ -4,10 +4,6 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "=4.16.0"
     }
-    # azuread = {
-    #   source  = "hashicorp/azuread"
-    #   version = "~> 2.0"
-    # }
   }
   backend "azurerm" {
       resource_group_name  = "k21"
@@ -18,20 +14,7 @@ terraform {
 }
 
 
-# variable "azure_subscription_id" {
-#   type = string
-# }
-
-
-# variable "azure_tenant_id" {
-#   type = string
-# }
-
-
 provider "azurerm" {
-  # resource_provider_registrations = "extended"
-  # subscription_id = var.azure_subscription_id
-  # tenant_id = var.azure_tenant_id
   features {}
 }
 
@@ -67,6 +50,7 @@ resource "azurerm_container_registry" "acr" {
   public_network_access_enabled = true    # only public access supported with basic plan
   anonymous_pull_enabled = false
 
+  depends_on = [ azurerm_resource_group.app ]
   tags = {
     project = var.project_name
   }

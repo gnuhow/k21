@@ -1,10 +1,6 @@
 variables:
-- name: doDestroy
-  value: false
 - name: color
   value: '\033[0;33m'
-- name: logLevel
-  value: ERROR
 
 trigger:
 - main
@@ -14,97 +10,94 @@ pool:
 
 stages:
 - stage: Terraform
+  variables:
+    doDestroy: false
+    logLevel: ERROR
+    terraformVersion: '1.10.5'
+
   jobs:
   - job: Terraform
     displayName: Terraform
     steps:
-      - task: TerraformInstaller@1
-        inputs:
-          terraformVersion: $(TERRAFORM_VERSION)
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: $(terraformVersion)
 
-      - task: TerraformTaskV4@4
-        name: terraformInit
-        displayName: Initialize terraform
-        env:
-          TF_LOG: $(logLevel)
-        inputs:
-          provider: azurerm
-          command: init
-          backendServiceArm: k21-devops
-          backendAzureRmStorageAccountName: k21devops
-          backendAzureRmContainerName: tfstate
-          backendAzureRmKey: terraform.tfstate
-          backendAzureRmResourceGroupName: k21
-          workingDirectory: terraform
+    - task: TerraformTaskV4@4
+      name: terraformInit
+      displayName: Initialize terraform
+      env:
+        TF_LOG: $(logLevel)
+      inputs:
+        provider: azurerm
+        command: init
+        backendServiceArm: k21-devops
+        backendAzureRmStorageAccountName: k21devops
+        backendAzureRmContainerName: tfstate
+        backendAzureRmKey: terraform.tfstate
+        backendAzureRmResourceGroupName: k21
+        workingDirectory: terraform
 
-      - task: TerraformTaskV4@4
-        name: terraformValidate
-        displayName: Validate Terraform
-        inputs:
-          provider: azurerm
-          command: validate
-          workingDirectory: terraform
+    - task: TerraformTaskV4@4
+      name: terraformValidate
+      displayName: Validate Terraform
+      inputs:
+        provider: azurerm
+        command: validate
+        workingDirectory: terraform
 
-      - task: TerraformTaskV4@4
-        name: terraformPlan
-        displayName: Terraform Plan
-        condition: eq(variables['doDestroy'], false)
-        inputs:
-          provider: azurerm
-          command: plan
-          commandOptions: '-out main.tfplan' #-var azure_tenant_id=$(AZURE_TENANT_ID) -var azure_subscription_id=$(AZURE_SUBSCRIPTION_ID)'
-          environmentServiceNameAzureRM: k21-devops
-          workingDirectory: terraform
-      # - script: |
-      #     ls terraform
-      #     # echo $(storageAccountName)
-      #     # az storage container list --account-name $(storageAccountName)
-      #     # az storage blob list --account-name $(storageAccountName) --container-name k21devops
-      #   name: state
-      #   displayName: Terraform State
+    - task: TerraformTaskV4@4
+      name: terraformPlan
+      displayName: Terraform Plan
+      condition: eq(variables['doDestroy'], false)
+      inputs:
+        provider: azurerm
+        command: plan
+        commandOptions: '-out main.tfplan'
+        environmentServiceNameAzureRM: k21-devops
+        workingDirectory: terraform
 
-      # Only runs if the 'terraformPlan' task has detected changes the in state.
-      - task: TerraformTaskV4@4
-        name: terraformApply
-        displayName: Terraform Apply
-        condition: and(succeeded(), eq(variables['terraformPlan.changesPresent'], 'true'), eq(variables['doDestroy'], false))
-        env:
-          TF_LOG: $(logLevel)
-        inputs:
-          provider: azurerm
-          command: apply
-          commandOptions: main.tfplan
-          environmentServiceNameAzureRM: k21-devops
-          workingDirectory: terraform
+    # Only runs if the 'terraformPlan' task has detected changes the in state.
+    - task: TerraformTaskV4@4
+      name: terraformApply
+      displayName: Terraform Apply
+      condition: and(succeeded(), eq(variables['terraformPlan.changesPresent'], 'true'), eq(variables['doDestroy'], false))
+      env:
+        TF_LOG: $(logLevel)
+      inputs:
+        provider: azurerm
+        command: apply
+        commandOptions: main.tfplan
+        environmentServiceNameAzureRM: k21-devops
+        workingDirectory: terraform
 
-      - task: TerraformTaskV4@4
-        name: terraformPlanDestroy
-        displayName: Terraform Plan for Destruction
-        condition: eq(variables['doDestroy'], true)
-        inputs:
-          provider: azurerm
-          command: plan
-          commandOptions: '-destroy -out main.tfplan'
-          environmentServiceNameAzureRM: k21-devops
-          workingDirectory: terraform
+    - task: TerraformTaskV4@4
+      name: terraformPlanDestroy
+      displayName: Terraform Plan for Destruction
+      condition: eq(variables['doDestroy'], true)
+      inputs:
+        provider: azurerm
+        command: plan
+        commandOptions: '-destroy -out main.tfplan'
+        environmentServiceNameAzureRM: k21-devops
+        workingDirectory: terraform
 
-      - task: TerraformTaskV4@4
-        name: terraformDestroy
-        displayName: Terraform Destroy
-        condition: and(succeeded(), eq(variables['doDestroy'], true))
-        env:
-          TF_LOG: $(logLevel)
-        inputs:
-          provider: azurerm
-          command: apply
-          commandOptions: main.tfplan
-          environmentServiceNameAzureRM: k21-devops
-          workingDirectory: terraform
+    - task: TerraformTaskV4@4
+      name: terraformDestroy
+      displayName: Terraform Destroy
+      condition: and(succeeded(), eq(variables['doDestroy'], true))
+      env:
+        TF_LOG: $(logLevel)
+      inputs:
+        provider: azurerm
+        command: apply
+        commandOptions: main.tfplan
+        environmentServiceNameAzureRM: k21-devops
+        workingDirectory: terraform
 
-      # - script: |
-      #     ls terraform
-      #     # echo $(storageAccountName)
-      #     # az storage container list --account-name $(storageAccountName)
-      #     # az storage blob list --account-name $(storageAccountName) --container-name k21devops
-      #   name: state
-      #   displayName: Terraform State
+# - stages: Containers
+#   jobs:
+#   - job: Containers
+#     displayName: Containers
+#     steps:
+#     - task: 
