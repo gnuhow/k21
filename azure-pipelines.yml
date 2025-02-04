@@ -33,7 +33,7 @@ stages:
           backendServiceArm: k21-devops
           backendAzureRmStorageAccountName: k21devops
           backendAzureRmContainerName: tfstate
-          backendAzureRmKey:eq(variables['terraformPlan.changesPresent'], 'true'),  'terraform.tfstate'
+          backendAzureRmKey: terraform.tfstate
           backendAzureRmResourceGroupName: k21
           workingDirectory: terraform
 
