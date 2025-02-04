@@ -1,10 +1,10 @@
 variables:
 - name: doDestroy
-  value: true
-- name: storageAccountName
-  value: k21devops
+  value: false
 - name: color
   value: '\033[0;33m'
+- name: logLevel
+  value: ERROR
 
 trigger:
 - main
@@ -26,14 +26,14 @@ stages:
         name: terraformInit
         displayName: Initialize terraform
         env:
-          TF_LOG: INFO
+          TF_LOG: $(logLevel)
         inputs:
           provider: azurerm
           command: init
           backendServiceArm: k21-devops
-          backendAzureRmStorageAccountName: $(storageAccountName)
+          backendAzureRmStorageAccountName: k21devops
           backendAzureRmContainerName: tfstate
-          backendAzureRmKey: 'terraform.tfstate'
+          backendAzureRmKey:eq(variables['terraformPlan.changesPresent'], 'true'),  'terraform.tfstate'
           backendAzureRmResourceGroupName: k21
           workingDirectory: terraform
 
@@ -55,6 +55,13 @@ stages:
           commandOptions: '-out main.tfplan' #-var azure_tenant_id=$(AZURE_TENANT_ID) -var azure_subscription_id=$(AZURE_SUBSCRIPTION_ID)'
           environmentServiceNameAzureRM: k21-devops
           workingDirectory: terraform
+      # - script: |
+      #     ls terraform
+      #     # echo $(storageAccountName)
+      #     # az storage container list --account-name $(storageAccountName)
+      #     # az storage blob list --account-name $(storageAccountName) --container-name k21devops
+      #   name: state
+      #   displayName: Terraform State
 
       # Only runs if the 'terraformPlan' task has detected changes the in state.
       - task: TerraformTaskV4@4
@@ -62,7 +69,7 @@ stages:
         displayName: Terraform Apply
         condition: and(succeeded(), eq(variables['terraformPlan.changesPresent'], 'true'), eq(variables['doDestroy'], false))
         env:
-          TF_LOG: INFO
+          TF_LOG: $(logLevel)
         inputs:
           provider: azurerm
           command: apply
@@ -86,7 +93,7 @@ stages:
         displayName: Terraform Destroy
         condition: and(succeeded(), eq(variables['doDestroy'], true))
         env:
-          TF_LOG: INFO
+          TF_LOG: $(logLevel)
         inputs:
           provider: azurerm
           command: apply
