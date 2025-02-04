@@ -4,6 +4,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "=4.16.0"
     }
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = "~> 2.0"
+    }
   }
 }
 
@@ -19,9 +23,9 @@ variable "azure_tenant_id" {
 
 
 provider "azurerm" {
-  resource_provider_registrations = "extended"
-  subscription_id = var.azure_subscription_id
-  tenant_id = var.azure_tenant_id
+  # resource_provider_registrations = "extended"
+  # subscription_id = var.azure_subscription_id
+  # tenant_id = var.azure_tenant_id
   features {}
 }
 
