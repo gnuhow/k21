@@ -25,6 +25,8 @@ stages:
       - task: TerraformTaskV4@4
         name: terraformInit
         displayName: Initialize terraform
+        env:
+          TF_LOG: INFO
         inputs:
           provider: azurerm
           command: init
@@ -59,6 +61,8 @@ stages:
         name: terraformApply
         displayName: Terraform Apply
         condition: and(succeeded(), eq(variables['terraformPlan.changesPresent'], 'true'), eq(variables['doDestroy'], false))
+        env:
+          TF_LOG: INFO
         inputs:
           provider: azurerm
           command: apply
