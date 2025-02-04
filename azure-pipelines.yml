@@ -98,6 +98,7 @@ stages:
 
 
 - stage: Containers
+  condition: always()
   jobs:
   - job: Containers
     displayName: Containers
