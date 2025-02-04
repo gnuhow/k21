@@ -84,7 +84,8 @@ stages:
       - task: TerraformTaskV4@4
         name: terraformDestroy
         displayName: Terraform Destroy
-        condition: eq(variables['doDestroy'], true)        env:
+        condition: eq(variables['doDestroy'], true)        
+        env:
           TF_LOG: INFO
         inputs:
           provider: azurerm
