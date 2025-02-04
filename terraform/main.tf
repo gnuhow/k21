@@ -70,7 +70,7 @@ resource "azurerm_container_registry" "acr" {
 
 resource "azurerm_log_analytics_workspace" "app" {
   name                = var.project_name_long
-  location            = azurerm_resource_group.app.location
+  location            = var.azure_region
   resource_group_name = azurerm_resource_group.app.name
   sku                 = "PerGB2018"
   retention_in_days   = 30
@@ -83,7 +83,7 @@ resource "azurerm_log_analytics_workspace" "app" {
 
 resource "azurerm_container_app_environment" "app" {
   name                       = var.project_name_long
-  location                   = azurerm_resource_group.app.location
+  location                   = var.azure_region
   resource_group_name        = azurerm_resource_group.app.name
   log_analytics_workspace_id = azurerm_log_analytics_workspace.app.id
 
@@ -95,7 +95,7 @@ resource "azurerm_container_app_environment" "app" {
 
 resource "azurerm_container_app" "app" {
   name                         = var.project_name_long
-  location                     = azurerm_resource_group.app.location
+  location                     = var.azure_region
   resource_group_name          = azurerm_resource_group.app.name
   container_app_environment_id = azurerm_container_app_environment.app.id
   revision_mode                = "Single"
