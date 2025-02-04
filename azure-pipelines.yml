@@ -55,20 +55,6 @@ stages:
           commandOptions: '-out main.tfplan' #-var azure_tenant_id=$(AZURE_TENANT_ID) -var azure_subscription_id=$(AZURE_SUBSCRIPTION_ID)'
           environmentServiceNameAzureRM: k21-devops
           workingDirectory: terraform
- 
-      # Only runs if the 'terraformPlan' task has detected changes the in state. 
-      - task: TerraformTaskV4@4
-        name: terraformApply
-        displayName: Terraform Apply
-        condition: and(succeeded(), eq(variables['terraformPlan.changesPresent'], 'true'), eq(variables['doDestroy'], false))
-        env:
-          TF_LOG: INFO
-        inputs:
-          provider: azurerm
-          command: apply
-          commandOptions: main.tfplan
-          environmentServiceNameAzureRM: k21-devops
-          workingDirectory: terraform
 
       - task: TerraformTaskV4@4
         name: terraformPlanDestroy
@@ -81,15 +67,17 @@ stages:
           environmentServiceNameAzureRM: k21-devops
           workingDirectory: terraform
 
+      # Only runs if the 'terraformPlan' task has detected changes the in state. 
       - task: TerraformTaskV4@4
-        name: terraformDestroy
-        displayName: Terraform Destroy
-        condition: and(succeeded(), eq(variables['terraformPlan.changesPresent'], 'true'), eq(variables['doDestroy'], true)) 
+        name: terraformApply
+        displayName: Terraform Apply
+        condition: and(succeeded(), eq(variables['terraformPlan.changesPresent'], 'true'))
         env:
           TF_LOG: INFO
         inputs:
           provider: azurerm
-          command: destroy
+          command: apply
+          commandOptions: main.tfplan
           environmentServiceNameAzureRM: k21-devops
           workingDirectory: terraform
 
