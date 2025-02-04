@@ -60,12 +60,33 @@ stages:
         environmentServiceNameAzureRM: k21-devops
         workingDirectory: terraform
 
-    - task: ManualValidation@1
-      displayName: Approve Terraform Plan
-      condition: and(succeeded(), eq(variables['terraformPlan.changesPresent'], 'true'), eq(variables['doDestroy'], false))
+    - task: TerraformTaskV4@4
+      name: terraformPlanDestroy
+      displayName: Terraform Plan for Destruction
+      condition: eq(variables['doDestroy'], true)
       inputs:
-        notifyUsers: ''
-        instructions: Please review the terraform plan and approve the changes.
+        provider: azurerm
+        command: plan
+        commandOptions: '-destroy -out main.tfplan'
+        environmentServiceNameAzureRM: k21-devops
+        workingDirectory: terraform
+
+  # - job: Terraform Approve
+  #   displayName: Terraform Approve
+  #   steps:
+  #   - task: ManualValidation@1
+  #     displayName: Approve Terraform Plan
+  #     condition: and(succeeded(), eq(variables['terraformPlan.changesPresent'], 'true'), eq(variables['doDestroy'], false))
+  #     inputs:
+  #       notifyUsers: ''
+  #       instructions: Please review the terraform plan and approve the changes.
+
+  #   - task: ManualValidation@1
+  #     displayName: Approve Terraform Destruction
+  #     condition: and(succeeded(), eq(variables['doDestroy'], true))
+  #     inputs:
+  #       notifyUsers: ''
+  #       instructions: Please review the terraform plan and approve the destruction.
 
     # Only runs if the 'terraformPlan' task has detected changes the in state.
     - task: TerraformTaskV4@4
@@ -80,24 +101,6 @@ stages:
         commandOptions: main.tfplan
         environmentServiceNameAzureRM: k21-devops
         workingDirectory: terraform
-
-    - task: TerraformTaskV4@4
-      name: terraformPlanDestroy
-      displayName: Terraform Plan for Destruction
-      condition: eq(variables['doDestroy'], true)
-      inputs:
-        provider: azurerm
-        command: plan
-        commandOptions: '-destroy -out main.tfplan'
-        environmentServiceNameAzureRM: k21-devops
-        workingDirectory: terraform
-
-    - task: ManualValidation@1
-      displayName: Approve Terraform Destruction
-      condition: and(succeeded(), eq(variables['doDestroy'], true))
-      inputs:
-        notifyUsers: ''
-        instructions: Please review the terraform plan and approve the destruction.
 
     - task: TerraformTaskV4@4
       name: terraformDestroy
