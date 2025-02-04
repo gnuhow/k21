@@ -54,17 +54,17 @@ stages:
           environmentServiceNameAzureRM: k21-devops
           workingDirectory: terraform
  
-      # Only runs if the 'terraformPlan' task has detected changes the in state. 
-      # - task: TerraformTaskV4@4
-      #   name: terraformApply
-      #   displayName: Terraform Apply
-      #   condition: and(succeeded(), eq(variables['terraformPlan.changesPresent'], 'true'), eq(variables['doDestroy'], false))
-      #   inputs:
-      #     provider: azurerm
-      #     command: apply
-      #     commandOptions: main.tfplan
-      #     environmentServiceNameAzureRM: k21-devops
-      #     workingDirectory: terraform
+      Only runs if the 'terraformPlan' task has detected changes the in state. 
+      - task: TerraformTaskV4@4
+        name: terraformApply
+        displayName: Terraform Apply
+        condition: and(succeeded(), eq(variables['terraformPlan.changesPresent'], 'true'), eq(variables['doDestroy'], false))
+        inputs:
+          provider: azurerm
+          command: apply
+          commandOptions: main.tfplan
+          environmentServiceNameAzureRM: k21-devops
+          workingDirectory: terraform
 
       - task: TerraformTaskV4@4
         name: terraformPlanDestroy
@@ -89,10 +89,10 @@ stages:
           workingDirectory: terraform
 
       - script: | 
-          ls
-          echo $(storageAccountName)
-          az storage container list --account-name $(storageAccountName)
-          az storage blob list --account-name $(storageAccountName) --container-name k21devops
+          ls terraform
+          # echo $(storageAccountName)
+          # az storage container list --account-name $(storageAccountName)
+          # az storage blob list --account-name $(storageAccountName) --container-name k21devops
         name: uploadState
-        displayName: Upload Terraform State
+        displayName: Terraform State
 
