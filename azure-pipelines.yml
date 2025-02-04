@@ -52,7 +52,7 @@ stages:
         inputs:
           provider: azurerm
           command: plan
-          commandOptions: '-out main.tfplan -var azure_tenant_id=$(AZURE_TENANT_ID) -var azure_subscription_id=$(AZURE_SUBSCRIPTION_ID)'
+          commandOptions: '-out main.tfplan' #-var azure_tenant_id=$(AZURE_TENANT_ID) -var azure_subscription_id=$(AZURE_SUBSCRIPTION_ID)'
           environmentServiceNameAzureRM: k21-devops
           workingDirectory: terraform
  

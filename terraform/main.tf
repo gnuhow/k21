@@ -9,17 +9,23 @@ terraform {
     #   version = "~> 2.0"
     # }
   }
+  backend "azurerm" {
+      resource_group_name  = "k21"
+      storage_account_name = "k21devops"
+      container_name       = "tfstate"
+      key                  = "terraform.tfstate"
+  }
 }
 
 
-variable "azure_subscription_id" {
-  type = string
-}
+# variable "azure_subscription_id" {
+#   type = string
+# }
 
 
-variable "azure_tenant_id" {
-  type = string
-}
+# variable "azure_tenant_id" {
+#   type = string
+# }
 
 
 provider "azurerm" {
