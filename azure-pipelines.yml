@@ -96,7 +96,7 @@ stages:
         workingDirectory: terraform
 
 
-- stages: Containers
+- stage: Containers
   jobs:
   - job: Containers
     displayName: Containers
