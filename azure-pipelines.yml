@@ -32,7 +32,7 @@ stages:
           command: init
           backendServiceArm: k21-devops
           backendAzureRmStorageAccountName: $(storageAccountName)
-          backendAzureRmContainerName: k21devops
+          backendAzureRmContainerName: tfstate
           backendAzureRmKey: 'terraform.tfstate'
           backendAzureRmResourceGroupName: k21
           workingDirectory: terraform
