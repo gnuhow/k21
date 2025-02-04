@@ -59,7 +59,7 @@ resource "azurerm_container_registry" "acr" {
   location                      = var.azure_region
   sku                           = "Basic"
   admin_enabled                 = false
-  public_network_access_enabled = true # only public access supported with basic plan
+  public_network_access_enabled = true    # only public access supported with basic plan
   anonymous_pull_enabled        = false
 
   tags = {
@@ -67,12 +67,13 @@ resource "azurerm_container_registry" "acr" {
   }
 }
 
+
 resource "azurerm_log_analytics_workspace" "app" {
   name                = var.project_name_long
   location            = azurerm_resource_group.app.location
   resource_group_name = azurerm_resource_group.app.name
   sku                 = "PerGB2018"
-  retention_in_days   = 5
+  retention_in_days   = 30
 
   tags = {
     project = var.project_name
