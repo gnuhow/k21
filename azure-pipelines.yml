@@ -1,6 +1,6 @@
 variables:
 - name: doDestroy
-  value: false
+  value: true
 - name: storageAccountName
   value: k21devops
 - name: color
@@ -84,7 +84,7 @@ stages:
       - task: TerraformTaskV4@4
         name: terraformDestroy
         displayName: Terraform Destroy
-        condition: eq(variables['doDestroy'], true)        
+        condition: and(succeeded(), eq(variables['terraformPlan.changesPresent'], 'true'), eq(variables['doDestroy'], true)) 
         env:
           TF_LOG: INFO
         inputs:
@@ -100,4 +100,3 @@ stages:
       #     # az storage blob list --account-name $(storageAccountName) --container-name k21devops
       #   name: state
       #   displayName: Terraform State
-
