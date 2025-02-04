@@ -1,6 +1,6 @@
 variables:
-- name: color
-  value: '\033[0;33m'
+  color: '\033[0;33m'
+  doTerraform: false
 
 trigger:
 - main
@@ -10,6 +10,7 @@ pool:
 
 stages:
 - stage: Terraform
+  condition: eq(variables['doTerraform'], true)
   variables:
     doDestroy: false
     logLevel: ERROR
@@ -110,6 +111,14 @@ stages:
     - task: Docker@2
       displayName: Docker Build and Push
       inputs:
+        repository: app
+        containerRegistry: k21-registry
         command: buildAndPush
-        tags: v1.00.00
-  
+        tags: |   # v1.00.00
+          $(Containers.BuildId)
+
+    - task: Docker@2
+      displayName: Logout
+      inputs:
+        command: logout
+        containerRegistry: k21-registry
