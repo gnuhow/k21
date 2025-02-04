@@ -54,7 +54,7 @@ stages:
           environmentServiceNameAzureRM: k21-devops
           workingDirectory: terraform
  
-      Only runs if the 'terraformPlan' task has detected changes the in state. 
+      # Only runs if the 'terraformPlan' task has detected changes the in state. 
       - task: TerraformTaskV4@4
         name: terraformApply
         displayName: Terraform Apply
