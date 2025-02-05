@@ -55,9 +55,11 @@ stages:
       env:
         TF_LOG: INFO
       inputs:
+        outputTo: console
         provider: azurerm
         command: custom
-        commandOptions: 'import azurerm_container_app.app k21project -var app_container_url=$(APP_CONTAINER_URL) -var app_container_version=$(appVersion)'
+        customCommand: import
+        commandOptions: 'azurerm_container_app.app k21project -var app_container_url=$(APP_CONTAINER_URL) -var app_container_version=$(appVersion)'
         workingDirectory: terraform
 
     - task: TerraformTaskV4@4
