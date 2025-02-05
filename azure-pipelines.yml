@@ -15,7 +15,7 @@ stages:
   condition: eq(variables['doTerraform'], true)
   variables:
     doDestroy: false
-    logLevel: ERROR
+    logLevel: INFO
     terraformVersion: '1.10.5'
 
   jobs:
@@ -53,13 +53,13 @@ stages:
       name: terraformImportAppEnv
       displayName: Import Container App
       env:
-        TF_LOG: INFO
+        TF_LOG: $(logLevel)
       inputs:
-        outputTo: console
+        # outputTo: console
         provider: azurerm
         command: custom
         customCommand: import
-        commandOptions: 'azurerm_container_app.app /subscriptions/$(AZURE_SUBSCRIPTION_ID)/resourceGroups/k21-app/providers/Microsoft.App/containerApps/k21project' # -var app_container_url=$(APP_CONTAINER_URL) -var app_container_version=$(appVersion)
+        commandOptions: "azurerm_container_app.app /subscriptions/$(AZURE_SUBSCRIPTION_ID)/resourceGroups/k21-app/providers/Microsoft.App/containerApps/k21project" # -var app_container_url=$(APP_CONTAINER_URL) -var app_container_version=$(appVersion)
         environmentServiceNameAzureRM: k21-devops
         workingDirectory: terraform
 
@@ -67,6 +67,8 @@ stages:
       name: terraformPlan
       displayName: Terraform Plan
       condition: eq(variables['doDestroy'], false)
+      env:
+        TF_LOG: $(logLevel)
       inputs:
         provider: azurerm
         command: plan
