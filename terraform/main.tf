@@ -43,20 +43,23 @@ variable "app_container_version" {
   type = string
 }
 
-variable "shared_tags" {
-  type = object({
-    project = string
-  })
-  default = {
-      project = var.project_name
-    }
-}
+# variable "shared_tags" {
+#   type = object({
+#     project = string
+#   })
+#   default = {
+#       project = var.project_name
+#     }
+# }
+
 
 resource "azurerm_resource_group" "app" {
   name     = join("-", [var.project_name, "app"])
   location = var.azure_region
 
-  tags = var.shared_tags
+  tags = {
+    project = var.project_name
+  }
 }
 
 
