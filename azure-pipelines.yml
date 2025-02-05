@@ -74,7 +74,7 @@ stages:
       inputs:
         provider: azurerm
         command: plan
-        commandOptions: '-out main.tfplan -var app_container_url=$(APP_CONTAINER_URL) -var app_container_version=$(appVersion)'
+        commandOptions: '-out main.tfplan -var app_container_url=$(APP_CONTAINER_URL) -var app_container_version=$(appVersion) -lock=false"'
         environmentServiceNameAzureRM: k21-devops
         workingDirectory: terraform
 
