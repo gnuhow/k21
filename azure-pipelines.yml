@@ -50,6 +50,24 @@ stages:
         workingDirectory: terraform
 
     - task: TerraformTaskV4@4
+      name: terraformImportLogWork
+      displayName: Validate Import Log Workspace
+      inputs:
+        provider: azurerm
+        command: custom
+        commandOptions: 'import azurerm_log_analytics_workspace.app k21workspace -var app_container_url=$(APP_CONTAINER_URL) -var app_container_version=$(appVersion)'
+        workingDirectory: terraform
+
+    - task: TerraformTaskV4@4
+      name: terraformImportAppEnv
+      displayName: Validate Import App Environment
+      inputs:
+        provider: azurerm
+        command: custom
+        commandOptions: 'import azurerm_container_app_environment.app k21project -var app_container_url=$(APP_CONTAINER_URL) -var app_container_version=$(appVersion)'
+        workingDirectory: terraform
+
+    - task: TerraformTaskV4@4
       name: terraformPlan
       displayName: Terraform Plan
       condition: eq(variables['doDestroy'], false)

@@ -43,13 +43,20 @@ variable "app_container_version" {
   type = string
 }
 
+variable "shared_tags" {
+  type = object({
+    project = string
+  })
+  default = {
+      project = var.project_name
+    }
+}
+
 resource "azurerm_resource_group" "app" {
   name     = join("-", [var.project_name, "app"])
   location = var.azure_region
 
-  tags = {
-    project = var.project_name
-  }
+  tags = var.shared_tags
 }
 
 
@@ -102,7 +109,7 @@ resource "azurerm_container_app" "app" {
   template {
     container {
       name   = var.project_name
-      image  = join("", [var.app_container_url, var.app_container_version])
+      image  = join(":", [var.app_container_url, var.app_container_version])
       cpu    = 0.5
       memory = "1Gi"
     }
