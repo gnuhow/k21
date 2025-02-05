@@ -34,12 +34,12 @@ stages:
       inputs:
         provider: azurerm
         command: init
+        workingDirectory: terraform
         backendServiceArm: k21-devops
         backendAzureRmStorageAccountName: k21devops
         backendAzureRmContainerName: tfstate
         backendAzureRmKey: terraform.tfstate
         backendAzureRmResourceGroupName: k21
-        workingDirectory: terraform
 
     - task: TerraformTaskV4@4
       name: terraformValidate
@@ -51,7 +51,7 @@ stages:
 
     - task: TerraformTaskV4@4
       name: terraformImportAppEnv
-      displayName: Validate Import App Environment
+      displayName: Import Container App
       env:
         TF_LOG: INFO
       inputs:
@@ -61,6 +61,11 @@ stages:
         customCommand: import
         commandOptions: 'azurerm_container_app.app k21project -var app_container_url=$(APP_CONTAINER_URL) -var app_container_version=$(appVersion)'
         workingDirectory: terraform
+        backendServiceArm: k21-devops
+        backendAzureRmStorageAccountName: k21devops
+        backendAzureRmContainerName: tfstate
+        backendAzureRmKey: terraform.tfstate
+        backendAzureRmResourceGroupName: k21
 
     - task: TerraformTaskV4@4
       name: terraformPlan
