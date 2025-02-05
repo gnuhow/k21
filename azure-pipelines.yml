@@ -59,7 +59,7 @@ stages:
         provider: azurerm
         command: custom
         customCommand: import
-        commandOptions: '"azurerm_container_app.app \"/subscriptions/$(AZURE_SUBSCRIPTION_ID)/resourceGroups/k21-app/providers/Microsoft.App/containerApps/k21project\""' # -var app_container_url=$(APP_CONTAINER_URL) -var app_container_version=$(appVersion)
+        commandOptions: 'azurerm_container_app.app /subscriptions/$(AZURE_SUBSCRIPTION_ID)/resourceGroups/k21-app/providers/Microsoft.App/containerApps/k21project' # -var app_container_url=$(APP_CONTAINER_URL) -var app_container_version=$(appVersion)
         environmentServiceNameAzureRM: k21-devops
         workingDirectory: terraform
 
