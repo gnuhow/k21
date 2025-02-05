@@ -19,7 +19,7 @@ stages:
     terraformVersion: '1.10.5'
 
   jobs:
-  - job: Terraform
+  - job: TerraformPlan
     displayName: Terraform
     steps:
     - task: TerraformInstaller@1
@@ -89,17 +89,17 @@ stages:
         environmentServiceNameAzureRM: k21-devops
         workingDirectory: terraform
 
-  - job: TerraformApprove
-    displayName: Terraform Approve
-    steps:
-    - task: ManualValidation@1
+  # - job: TerraformApprove
+  #   displayName: Terraform Approve
+  #   steps:
+    - task: ManualValidation@0
       displayName: Approve Terraform Plan
       condition: and(succeeded(), eq(variables['terraformPlan.changesPresent'], 'true'), eq(variables['doDestroy'], false))
       inputs:
         notifyUsers: ''
         instructions: Please review the terraform plan and approve the changes.
 
-    - task: ManualValidation@1
+    - task: ManualValidation@0
       displayName: Approve Terraform Destruction
       condition: and(succeeded(), eq(variables['doDestroy'], true))
       inputs:
@@ -108,6 +108,7 @@ stages:
 
   # - job: TerraformDeploy
   #   displayName: Terraform Deploy
+  #   steps:
   #   # Only runs if the 'terraformPlan' task has detected changes the in state.
   #   - task: TerraformTaskV4@4
   #     name: terraformApply
