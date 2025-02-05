@@ -21,6 +21,7 @@ stages:
   jobs:
   - job: TerraformPlan
     displayName: Terraform
+    pool: agent
     steps:
     - task: TerraformInstaller@1
       inputs:
