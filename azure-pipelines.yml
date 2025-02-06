@@ -2,7 +2,7 @@ variables:
   color: '\033[0;33m'
   doTerraform: false
   doContainer: true
-  appVersion: 'v1.0.1'
+  appVersion: 'v1.0.2'
 
 trigger:
 - main
@@ -125,15 +125,15 @@ stages:
         tags: |
           $(appVersion)
 
-    # - task: Docker@2
-    #   displayName: Docker Build and Push nginx
-    #   inputs:
-    #     repository: nginx
-    #     Dockerfile: ./container/app/Dockerfile
-    #     containerRegistry: k21-registry
-    #     command: buildAndPush
-    #     tags: | # eg: v1.00.104
-    #       $(appVersion)
+    - task: Docker@2
+      displayName: Docker Build and Push nginx
+      inputs:
+        repository: nginx
+        Dockerfile: ./container/app/Dockerfile
+        containerRegistry: k21-registry
+        command: buildAndPush
+        tags: |
+          $(appVersion)
 
     - task: Docker@2
       displayName: Logout
