@@ -164,7 +164,7 @@ resource "azurerm_container_app" "app" {
   
   template {
     container {
-      name   = var.project_name
+      name   = "app"
       image  = join("", [var.acr_url,"/app",":",var.app_version])
       cpu    = 0.5
       memory = "1Gi"
