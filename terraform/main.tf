@@ -169,6 +169,13 @@ resource "azurerm_container_app" "app" {
       cpu    = 0.5
       memory = "1Gi"
     }
+
+    container {
+      name   = "web"
+      image  = join("", [var.acr_url,"/web",":",var.app_version])
+      cpu    = 0.5
+      memory = "1Gi"
+    }
   }
 
   tags = {
