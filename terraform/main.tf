@@ -37,24 +37,14 @@ variable "project_name_long" {
 }
 
 
-variable "app_container_url" {
+variable "acr_url" {
   type = string
 }
 
 
-variable "app_container_version" {
+variable "app_version" {
   type = string
 }
-
-
-# variable "shared_tags" {
-#   type = object({
-#     project = string
-#   })
-#   default = {
-#       project = var.project_name
-#     }
-# }
 
 
 resource "azurerm_resource_group" "app" {
@@ -107,22 +97,22 @@ resource "azurerm_container_app_environment" "app" {
 }
 
 
-# resource "azurerm_container_app" "app" {
-#   name                         = var.project_name_long
-#   resource_group_name          = azurerm_resource_group.app.name
-#   container_app_environment_id = azurerm_container_app_environment.app.id
-#   revision_mode                = "Single"
+resource "azurerm_container_app" "app" {
+  name                         = var.project_name_long
+  resource_group_name          = azurerm_resource_group.app.name
+  container_app_environment_id = azurerm_container_app_environment.app.id
+  revision_mode                = "Single"
 
-#   template {
-#     container {
-#       name   = var.project_name
-#       image  = join(":", [var.app_container_url, var.app_container_version])
-#       cpu    = 0.5
-#       memory = "1Gi"
-#     }
-#   }
+  template {
+    container {
+      name   = var.project_name
+      image  = join("", [var.acr_url,"/app",":",var.app_version])
+      cpu    = 0.5
+      memory = "1Gi"
+    }
+  }
 
-#   tags = {
-#     project = var.project_name
-#   }
-# }
+  tags = {
+    project = var.project_name
+  }
+}

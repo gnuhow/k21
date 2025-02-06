@@ -1,7 +1,7 @@
 variables:
   color: '\033[0;33m'
-  doTerraform: false
-  doContainer: true
+  doTerraform: true
+  doContainer: false
   appVersion: 'v0.0.2'
 
 trigger:
@@ -60,7 +60,7 @@ stages:
       inputs:
         provider: azurerm
         command: plan
-        commandOptions: '-out main.tfplan -var app_container_url=$(APP_CONTAINER_URL) -var app_container_version=$(appVersion)'
+        commandOptions: '-out main.tfplan -var acr_url=$(ACR_URL) -var app_version=$(appVersion)'
         environmentServiceNameAzureRM: k21-devops
         workingDirectory: terraform
 
