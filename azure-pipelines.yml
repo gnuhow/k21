@@ -15,7 +15,7 @@ stages:
   condition: eq(variables['doTerraform'], true)
   variables:
     doDestroy: false
-    logLevel: INFO
+    logLevel: ERROR
     terraformVersion: '1.10.5'
 
   jobs:
@@ -51,20 +51,6 @@ stages:
         command: validate
         workingDirectory: terraform
 
-    # - task: TerraformTaskV4@4
-    #   name: terraformImportAppEnv
-    #   displayName: Import Container App
-    #   env:
-    #     TF_LOG: $(logLevel)
-    #   inputs:
-    #     # outputTo: console
-    #     provider: azurerm
-    #     command: custom
-    #     customCommand: import
-    #     commandOptions: "-lock=false azurerm_container_app.app /subscriptions/$(AZURE_SUBSCRIPTION_ID)/resourceGroups/k21-app/providers/Microsoft.App/containerApps/k21project" # -var app_container_url=$(APP_CONTAINER_URL) -var app_container_version=$(appVersion)
-    #     environmentServiceNameAzureRM: k21-devops
-    #     workingDirectory: terraform
-
     - task: TerraformTaskV4@4
       name: terraformPlan
       displayName: Terraform Plan
@@ -74,7 +60,7 @@ stages:
       inputs:
         provider: azurerm
         command: plan
-        commandOptions: '-out main.tfplan -var app_container_url=$(APP_CONTAINER_URL) -var app_container_version=$(appVersion) -lock=false"'
+        commandOptions: '-out main.tfplan -var app_container_url=$(APP_CONTAINER_URL) -var app_container_version=$(appVersion)'
         environmentServiceNameAzureRM: k21-devops
         workingDirectory: terraform
 
@@ -89,19 +75,19 @@ stages:
         environmentServiceNameAzureRM: k21-devops
         workingDirectory: terraform
 
-  #   # Only runs if the 'terraformPlan' task has detected changes the in state.
-  #   - task: TerraformTaskV4@4
-  #     name: terraformApply
-  #     displayName: Terraform Apply
-  #     condition: and(succeeded(), eq(variables['terraformPlan.changesPresent'], 'true'), eq(variables['doDestroy'], false))
-  #     env:
-  #       TF_LOG: $(logLevel)
-  #     inputs:
-  #       provider: azurerm
-  #       command: apply
-  #       commandOptions: main.tfplan
-  #       environmentServiceNameAzureRM: k21-devops
-  #       workingDirectory: terraform
+    # Only runs if the 'terraformPlan' task has detected changes the in state.
+    - task: TerraformTaskV4@4
+      name: terraformApply
+      displayName: Terraform Apply
+      condition: and(succeeded(), eq(variables['terraformPlan.changesPresent'], 'true'), eq(variables['doDestroy'], false))
+      env:
+        TF_LOG: $(logLevel)
+      inputs:
+        provider: azurerm
+        command: apply
+        commandOptions: main.tfplan
+        environmentServiceNameAzureRM: k21-devops
+        workingDirectory: terraform
 
     - task: TerraformTaskV4@4
       name: terraformDestroy
