@@ -21,7 +21,7 @@ provider "azurerm" {
 
 
 variable "subscription_id" {
-  type = string  
+  type = string
 }
 
 
@@ -67,10 +67,10 @@ resource "azurerm_resource_group" "app" {
 }
 
 
-resource azurerm_user_assigned_identity "app" {
-  name     = var.project_name_long
-  location = var.azure_region
-  resource_group_name  = azurerm_resource_group.app.name
+resource "azurerm_user_assigned_identity" "app" {
+  name                = var.project_name_long
+  location            = var.azure_region
+  resource_group_name = azurerm_resource_group.app.name
 }
 
 
@@ -80,7 +80,7 @@ resource "azurerm_role_definition" "app" {
   description = "Used by the k21 container app"
 
   permissions {
-    actions     = [
+    actions = [
       "Microsoft.ContainerRegistry/registries/pull/read",
       "Microsoft.ContainerRegistry/operations/read",
       "Microsoft.ContainerRegistry/locations/operationResults/read",
@@ -97,7 +97,7 @@ resource "azurerm_role_definition" "app" {
   }
 
   assignable_scopes = [
-    azurerm_resource_group.app.id   # scoped to resource group
+    azurerm_resource_group.app.id # scoped to resource group
     # join("", ["/subscriptions/", var.subscription_id])
   ]
 }
@@ -116,7 +116,7 @@ resource "azurerm_container_registry" "acr" {
   location                      = var.azure_region
   sku                           = "Basic"
   admin_enabled                 = false
-  public_network_access_enabled = true    # only public access supported with basic plan
+  public_network_access_enabled = true # only public access supported with basic plan
   anonymous_pull_enabled        = false
 
   tags = {
@@ -143,7 +143,7 @@ resource "azurerm_container_app_environment" "app" {
   location                   = var.azure_region
   resource_group_name        = azurerm_resource_group.app.name
   log_analytics_workspace_id = azurerm_log_analytics_workspace.app.id
- 
+
   tags = {
     project = var.project_name
   }
@@ -155,31 +155,31 @@ resource "azurerm_container_app" "app" {
   resource_group_name          = azurerm_resource_group.app.name
   container_app_environment_id = azurerm_container_app_environment.app.id
   revision_mode                = "Single"
-  
+
   identity {
-    type = "UserAssigned"
-    identity_ids = [ azurerm_user_assigned_identity.app.id ]
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.app.id]
   }
 
   registry {
     identity = azurerm_user_assigned_identity.app.id
     server   = var.acr_url
   }
-  
+
   template {
     max_replicas = 2
     min_replicas = 0
-  
+
     container {
       name   = "app"
-      image  = join("", [var.acr_url,"/app",":",var.app_version])
+      image  = join("", [var.acr_url, "/app", ":", var.app_version])
       cpu    = 0.5
       memory = "1Gi"
     }
 
     container {
       name   = "web"
-      image  = join("", [var.acr_url,"/web",":",var.app_version])
+      image  = join("", [var.acr_url, "/web", ":", var.app_version])
       cpu    = 0.5
       memory = "1Gi"
     }
@@ -187,19 +187,20 @@ resource "azurerm_container_app" "app" {
 
   ingress {
     allow_insecure_connections = true
-    target_port = 8080
-    exposed_port = 8080
-    transport = "http"
+    target_port                = 8080
+    exposed_port               = 8080
+    transport                  = "http"
 
     traffic_weight {
-      label = "web"
-      percentage = 100
+      label           = "web"
+      latest_revision = true
+      percentage      = 100
     }
 
     ip_security_restriction {
-      name = "allowMe"
-      action = "Allow"
-      description = "Allow traffic from my location."
+      name             = "allowMe"
+      action           = "Allow"
+      description      = "Allow traffic from my location."
       ip_address_range = var.my_cidr
     }
   }
