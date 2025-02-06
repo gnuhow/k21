@@ -42,4 +42,4 @@ secret.tf
 # my stuff
 .todo
 setup.md
-.devops/*
+.setup
