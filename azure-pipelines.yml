@@ -1,8 +1,8 @@
 variables:
   color: '\033[0;33m'
-  doTerraform: true
-  doContainer: false
-  appVersion: 'v1.00.89'
+  doTerraform: false
+  doContainer: true
+  appVersion: 'v1.0.1'
 
 trigger:
 - main
