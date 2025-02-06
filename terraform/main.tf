@@ -70,6 +70,34 @@ resource azurerm_user_assigned_identity "app" {
 }
 
 
+resource "azurerm_role_definition" "app" {
+  name        = var.project_name_long
+  scope       = join("", ["/subscriptions/", var.subscription_id])
+  description = "Used by the k21 container app"
+
+  permissions {
+    actions     = [
+      "Microsoft.ContainerRegistry/registries/pull/read",
+      "Microsoft.ContainerRegistry/operations/read",
+      "Microsoft.ContainerRegistry/locations/operationResults/read",
+      "Microsoft.ContainerRegistry/registries/read",
+      "Microsoft.ContainerRegistry/registries/packages/archives/read",
+      "Microsoft.ContainerRegistry/registries/packages/archives/versions/read",
+      "Microsoft.ContainerRegistry/registries/push/write",
+      "Microsoft.ContainerRegistry/registries/runs/read",
+      "Microsoft.ContainerRegistry/registries/taskruns/read",
+      "Microsoft.ContainerRegistry/registries/tasks/read",
+      "Microsoft.ContainerRegistry/registries/taskruns/operationStatuses/read"
+    ]
+    not_actions = []
+  }
+
+  assignable_scopes = [
+    join("", ["/subscriptions/", var.subscription_id])
+  ]
+}
+
+
 resource "azurerm_container_registry" "acr" {
   name                          = join("", [var.project_name, "Registry"])
   resource_group_name           = azurerm_resource_group.app.name
