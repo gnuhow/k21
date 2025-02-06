@@ -63,6 +63,13 @@ resource "azurerm_resource_group" "app" {
 }
 
 
+resource azurerm_user_assigned_identity "app" {
+  name     = var.project_name_long
+  location = var.azure_region
+  resource_group_name  = azurerm_resource_group.app.name
+}
+
+
 resource "azurerm_container_registry" "acr" {
   name                          = join("", [var.project_name, "Registry"])
   resource_group_name           = azurerm_resource_group.app.name
@@ -96,29 +103,39 @@ resource "azurerm_container_app_environment" "app" {
   location                   = var.azure_region
   resource_group_name        = azurerm_resource_group.app.name
   log_analytics_workspace_id = azurerm_log_analytics_workspace.app.id
-
+ 
   tags = {
     project = var.project_name
   }
 }
 
 
-resource "azurerm_container_app" "app" {
-  name                         = var.project_name_long
-  resource_group_name          = azurerm_resource_group.app.name
-  container_app_environment_id = azurerm_container_app_environment.app.id
-  revision_mode                = "Single"
+# resource "azurerm_container_app" "app" {
+#   name                         = var.project_name_long
+#   resource_group_name          = azurerm_resource_group.app.name
+#   container_app_environment_id = azurerm_container_app_environment.app.id
+#   revision_mode                = "Single"
+  
+#   identity {
+#     type = "UserAssigned"
+#     identity_ids = [azurerm_user_assigned_identity.app.id ]
+#   }
 
-  template {
-    container {
-      name   = var.project_name
-      image  = join("", [var.acr_url,"/app",":",var.app_version])
-      cpu    = 0.5
-      memory = "1Gi"
-    }
-  }
+#   registry {
+#     identity = azurerm_user_assigned_identity.app.id
+#     server   = var.acr_url
+#   }
+  
+#   template {
+#     container {
+#       name   = var.project_name
+#       image  = join("", [var.acr_url,"/app",":",var.app_version])
+#       cpu    = 0.5
+#       memory = "1Gi"
+#     }
+#   }
 
-  tags = {
-    project = var.project_name
-  }
-}
+#   tags = {
+#     project = var.project_name
+#   }
+# }
