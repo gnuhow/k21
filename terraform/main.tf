@@ -95,16 +95,16 @@ resource "azurerm_log_analytics_workspace" "app" {
 }
 
 
-# resource "azurerm_container_app_environment" "app" {
-#   name                       = var.project_name_long
-#   location                   = var.azure_region
-#   resource_group_name        = azurerm_resource_group.app.name
-#   log_analytics_workspace_id = azurerm_log_analytics_workspace.app.id
+resource "azurerm_container_app_environment" "app" {
+  name                       = var.project_name_long
+  location                   = var.azure_region
+  resource_group_name        = azurerm_resource_group.app.name
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.app.id
 
-#   tags = {
-#     project = var.project_name
-#   }
-# }
+  tags = {
+    project = var.project_name
+  }
+}
 
 
 # resource "azurerm_container_app" "app" {
