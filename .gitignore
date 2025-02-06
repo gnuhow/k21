@@ -38,6 +38,8 @@ terraform.rc
 .terraform*
 
 secret.tf
+**/*.tfplan
+terraform/main.tfplan
 
 # my stuff
 .todo
