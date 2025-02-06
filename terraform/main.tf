@@ -93,17 +93,17 @@ resource "azurerm_role_definition" "app" {
   }
 
   assignable_scopes = [
-    azurerm_resource_group.app.id
+    azurerm_resource_group.app.id   # scoped to resource group
     # join("", ["/subscriptions/", var.subscription_id])
   ]
 }
 
 
-# resource "azurerm_role_assignment" "app" {
-#   scope              = join("", ["/subscriptions/", var.subscription_id])
-#   role_definition_id = azurerm_role_definition.app.role_definition_resource_id
-#   principal_id       = azurerm_user_assigned_identity.app.object_id
-# }
+resource "azurerm_role_assignment" "app" {
+  scope              = azurerm_resource_group.app.id
+  role_definition_id = azurerm_role_definition.app.role_definition_resource_id
+  principal_id       = azurerm_user_assigned_identity.app.principal_id
+}
 
 
 resource "azurerm_container_registry" "acr" {
