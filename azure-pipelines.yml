@@ -116,13 +116,24 @@ stages:
         containerRegistry: k21-registry
 
     - task: Docker@2
-      displayName: Docker Build and Push
+      displayName: Docker Build and Push App
       inputs:
         repository: app
+        Dockerfile: ./container/app/Dockerfile
         containerRegistry: k21-registry
         command: buildAndPush
-        tags: | # eg: v1.00.104
+        tags: |
           $(appVersion)
+
+    # - task: Docker@2
+    #   displayName: Docker Build and Push nginx
+    #   inputs:
+    #     repository: nginx
+    #     Dockerfile: ./container/app/Dockerfile
+    #     containerRegistry: k21-registry
+    #     command: buildAndPush
+    #     tags: | # eg: v1.00.104
+    #       $(appVersion)
 
     - task: Docker@2
       displayName: Logout
