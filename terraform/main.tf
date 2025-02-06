@@ -146,32 +146,32 @@ resource "azurerm_container_app_environment" "app" {
 }
 
 
-# resource "azurerm_container_app" "app" {
-#   name                         = var.project_name_long
-#   resource_group_name          = azurerm_resource_group.app.name
-#   container_app_environment_id = azurerm_container_app_environment.app.id
-#   revision_mode                = "Single"
+resource "azurerm_container_app" "app" {
+  name                         = var.project_name_long
+  resource_group_name          = azurerm_resource_group.app.name
+  container_app_environment_id = azurerm_container_app_environment.app.id
+  revision_mode                = "Single"
   
-#   identity {
-#     type = "UserAssigned"
-#     identity_ids = [azurerm_user_assigned_identity.app.id ]
-#   }
+  identity {
+    type = "UserAssigned"
+    identity_ids = [ azurerm_user_assigned_identity.app.id ]
+  }
 
-#   registry {
-#     identity = azurerm_user_assigned_identity.app.id
-#     server   = var.acr_url
-#   }
+  registry {
+    identity = azurerm_user_assigned_identity.app.id
+    server   = var.acr_url
+  }
   
-#   template {
-#     container {
-#       name   = var.project_name
-#       image  = join("", [var.acr_url,"/app",":",var.app_version])
-#       cpu    = 0.5
-#       memory = "1Gi"
-#     }
-#   }
+  template {
+    container {
+      name   = var.project_name
+      image  = join("", [var.acr_url,"/app",":",var.app_version])
+      cpu    = 0.5
+      memory = "1Gi"
+    }
+  }
 
-#   tags = {
-#     project = var.project_name
-#   }
-# }
+  tags = {
+    project = var.project_name
+  }
+}
