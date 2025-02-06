@@ -53,6 +53,10 @@ variable "app_version" {
 }
 
 
+variable "my_cidr" {
+  type = string
+}
+
 resource "azurerm_resource_group" "app" {
   name     = join("-", [var.project_name, "app"])
   location = var.azure_region
@@ -163,6 +167,9 @@ resource "azurerm_container_app" "app" {
   }
   
   template {
+    max_replicas = 2
+    min_replicas = 0
+  
     container {
       name   = "app"
       image  = join("", [var.acr_url,"/app",":",var.app_version])
@@ -175,6 +182,25 @@ resource "azurerm_container_app" "app" {
       image  = join("", [var.acr_url,"/web",":",var.app_version])
       cpu    = 0.5
       memory = "1Gi"
+    }
+  }
+
+  ingress {
+    allow_insecure_connections = true
+    target_port = 8080
+    exposed_port = 8080
+    transport = "http"
+
+    traffic_weight {
+      label = "web"
+      percentage = 100
+    }
+
+    ip_security_restriction {
+      name = "allowMe"
+      action = "Allow"
+      description = "Allow traffic from my location."
+      ip_address_range = var.my_cidr
     }
   }
 
