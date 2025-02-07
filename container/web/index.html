@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <!-- <title>$^title$$</title> -->
-    <title>Aces High</title>
+    <title>King's 21</title>
     <script src="index.js"></script>
     <link rel="stylesheet" href="styles.css">
   </head>
@@ -23,22 +23,55 @@
           <th>Status</th>
         </tr>
         <tr>
-          <td>A 2</td>
-          <td>13</td>
-          <td>10 4</td>
-          <td>14</td>
+          <td class="player-hand"></td>
+          <td class="player-count"></td>
+          <td class="dealer-hand"></td>
+          <td class="dealer-count"></td>
         </tr>
         <tr>
           <td>
-            <button>Deal</button>
+            <button onclick="hit();">Hit</button>
           </td>
           <td>
-            <button>Hold</button>
+            <button onclick="stand();">Stand</button>
           </td>
         </tr>
       </table>
       <h2 class="lose">You lose!</h2>
       <h2 class="win">You win!</h2>
+    </div>
+    <div class="main">
+      <table>
+        <tr>
+          <td>
+            <label for="player-name">Player Name</label>
+          </td>
+          <td>
+            <input type="text" id="player-name" name="player-name">
+          </td>    
+        </tr>
+        <tr>
+          <td>
+            <label for="deck-count">How many Decks?</label>
+          </td>
+          <td>
+            <input type="text" id="deck-count" name="deck-count">
+          </td>    
+        </tr>
+        <tr>
+          <td>
+            <label for="deck-count">Shuffle Limit</label>
+          </td>
+          <td>
+            <input type="text" id="shuffle-limit" name="shuffle-limit">
+          </td>    
+        </tr>
+        <tr>
+          <td>
+            <button onclick="start();">Start</button>
+          </td>
+        </tr>
+      </table>
     </div>
   </body>
 </html>
