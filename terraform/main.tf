@@ -185,6 +185,60 @@ resource "azurerm_container_app" "app" {
     transport                  = "http"
 
     traffic_weight {
+      label           = "app"
+      latest_revision = true
+      percentage      = 100
+    }
+
+    ip_security_restriction {
+      name             = "allowDevUser"
+      action           = "Allow"
+      description      = "Allow traffic from my location."
+      ip_address_range = var.my_cidr
+    }
+  }
+
+  tags = {
+    project = var.project_name
+  }
+}
+
+
+resource "azurerm_container_app" "web" {
+  name                         = var.project_name_long
+  resource_group_name          = azurerm_resource_group.app.name
+  container_app_environment_id = azurerm_container_app_environment.app.id
+  revision_mode                = "Single"
+
+  identity {
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.app.id]
+  }
+
+  registry {
+    identity = azurerm_user_assigned_identity.app.id
+    server   = var.acr_url
+  }
+
+  template {
+    max_replicas = 1
+    min_replicas = 1
+
+    container {
+      name   = "web"
+      image  = join("", [var.acr_url, "/web", ":", var.app_version])
+      cpu    = 0.5
+      memory = "1Gi"
+    }
+  }
+
+  ingress {
+    allow_insecure_connections = true
+    external_enabled = true
+    target_port                = 7000
+    transport                  = "http"
+
+    traffic_weight {
       label           = "web"
       latest_revision = true
       percentage      = 100

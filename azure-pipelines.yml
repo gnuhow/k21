@@ -52,7 +52,7 @@ stages:
 
 
 - stage: Terraform
-  displayName: Terraform Infrastructure
+  displayName: Terraform
   condition: eq(variables['doTerraform'], true)
   variables:
     doDestroy: false
@@ -70,7 +70,7 @@ stages:
 
     - task: TerraformTaskV4@4
       name: terraformInit
-      displayName: Initialize terraform
+      displayName: Initialize Terraform
       env:
         TF_LOG: $(logLevel)
       inputs:
