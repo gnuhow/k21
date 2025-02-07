@@ -151,7 +151,7 @@ resource "azurerm_container_app_environment" "app" {
 
 
 resource "azurerm_container_app" "app" {
-  name                         = var.project_name_long
+  name                         = join("", [var.project_name, "app"])
   resource_group_name          = azurerm_resource_group.app.name
   container_app_environment_id = azurerm_container_app_environment.app.id
   revision_mode                = "Single"
@@ -205,7 +205,7 @@ resource "azurerm_container_app" "app" {
 
 
 resource "azurerm_container_app" "web" {
-  name                         = var.project_name_long
+  name                         = join("", [var.project_name, "web"])
   resource_group_name          = azurerm_resource_group.app.name
   container_app_environment_id = azurerm_container_app_environment.app.id
   revision_mode                = "Single"
