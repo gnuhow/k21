@@ -179,10 +179,10 @@ resource "azurerm_container_app" "app" {
   }
 
   ingress {
-    allow_insecure_connections = true
+    allow_insecure_connections = false
     external_enabled = true
     target_port                = 6000
-    transport                  = "http"
+    transport                  = "http2"
 
     traffic_weight {
       label           = "app"
@@ -229,14 +229,19 @@ resource "azurerm_container_app" "web" {
       image  = join("", [var.acr_url, "/web", ":", var.app_version])
       cpu    = 0.5
       memory = "1Gi"
+
+      env {
+        name = "APP_URL"
+        value = azurerm_container_app.app.latest_revision_fqdn
+      }
     }
   }
 
   ingress {
-    allow_insecure_connections = true
+    allow_insecure_connections = false
     external_enabled = true
     target_port                = 7000
-    transport                  = "http"
+    transport                  = "http2"
 
     traffic_weight {
       label           = "web"

@@ -22,3 +22,6 @@ table.deal {
     border-spacing: 10px
 }
 
+th.deal {
+    text-align: left;
+}
