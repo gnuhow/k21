@@ -3,6 +3,7 @@ variables:
   doTerraform: true
   doContainer: false
   appVersion: 'v0.0.3'
+  azureServiceConnection: k21-devops
 
 trigger:
 - main
@@ -50,12 +51,14 @@ stages:
         containerRegistry: k21-registry
 
 
-- stage: Terraform
+- stage: TerraformPre
+  displayName: Terraform Pre Build Infrastructure
   condition: eq(variables['doTerraform'], true)
   variables:
     doDestroy: false
     logLevel: ERROR
     terraformVersion: '1.10.5'
+    workdingDirectory: terraform
 
   jobs:
   - job: TerraformPlan
@@ -73,8 +76,8 @@ stages:
       inputs:
         provider: azurerm
         command: init
-        workingDirectory: terraform
-        backendServiceArm: k21-devops
+        workingDirectory: $(workingDirectory)
+        backendServiceArm: $(azureServiceConnection)
         backendAzureRmStorageAccountName: k21devops
         backendAzureRmContainerName: tfstate
         backendAzureRmKey: terraform.tfstate
@@ -88,7 +91,7 @@ stages:
       inputs:
         provider: azurerm
         command: validate
-        workingDirectory: terraform
+        workingDirectory: $(workingDirectory)
 
     - task: TerraformTaskV4@4
       name: terraformPlan
@@ -100,8 +103,8 @@ stages:
         provider: azurerm
         command: plan
         commandOptions: '-out main.tfplan -var acr_url=$(ACR_URL) -var app_version=$(appVersion) -var subscription_id=$(AZURE_SUBSCRIPTION_ID) -var my_cidr=$(MY_CIDR)' # subscription_id required for local compatibility.
-        environmentServiceNameAzureRM: k21-devops
-        workingDirectory: terraform
+        environmentServiceNameAzureRM: $(azureServiceConnection)
+        workingDirectory: $(workingDirectory)
 
     - task: TerraformTaskV4@4
       name: terraformPlanDestroy
@@ -111,8 +114,8 @@ stages:
         provider: azurerm
         command: plan
         commandOptions: '-destroy -out main.tfplan'
-        environmentServiceNameAzureRM: k21-devops
-        workingDirectory: terraform
+        environmentServiceNameAzureRM: $(azureServiceConnection)
+        workingDirectory: $(workingDirectory)
 
     # Only runs if the 'terraformPlan' task has detected changes the in state.
     - task: TerraformTaskV4@4
@@ -125,8 +128,8 @@ stages:
         provider: azurerm
         command: apply
         commandOptions: main.tfplan
-        environmentServiceNameAzureRM: k21-devops
-        workingDirectory: terraform
+        environmentServiceNameAzureRM: $(azureServiceConnection)
+        workingDirectory: $(workingDirectory)
 
     - task: TerraformTaskV4@4
       name: terraformDestroy
@@ -138,6 +141,6 @@ stages:
         provider: azurerm
         command: apply
         commandOptions: main.tfplan
-        environmentServiceNameAzureRM: k21-devops
-        workingDirectory: terraform
+        environmentServiceNameAzureRM: $(azureServiceConnection)
+        workingDirectory: $(workingDirectory)
 
