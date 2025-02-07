@@ -182,7 +182,7 @@ resource "azurerm_container_app" "app" {
     allow_insecure_connections = false
     external_enabled = true
     target_port                = 6000
-    transport                  = "http2"
+    transport                  = "http"
 
     traffic_weight {
       label           = "app"
@@ -239,9 +239,9 @@ resource "azurerm_container_app" "web" {
 
   ingress {
     allow_insecure_connections = false
-    external_enabled = true
+    external_enabled           = true
     target_port                = 7000
-    transport                  = "http2"
+    transport                  = "http"
 
     traffic_weight {
       label           = "web"
