@@ -168,7 +168,7 @@ resource "azurerm_container_app" "app" {
 
   template {
     max_replicas = 1
-    min_replicas = 0
+    min_replicas = 1
 
     container {
       name   = "app"
@@ -180,6 +180,7 @@ resource "azurerm_container_app" "app" {
 
   ingress {
     allow_insecure_connections = true
+    external_enabled = true
     target_port                = 6000
     transport                  = "http"
 
