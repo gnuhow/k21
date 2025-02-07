@@ -10,6 +10,7 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+stages:
 - stage: Containers
   condition: eq(variables['doContainer'], true)
   jobs:
@@ -48,7 +49,7 @@ pool:
         command: logout
         containerRegistry: k21-registry
 
-stages:
+
 - stage: Terraform
   condition: eq(variables['doTerraform'], true)
   variables:
