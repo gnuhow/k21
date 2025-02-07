@@ -1,6 +1,6 @@
 let http = require('http');
 // let url = require('url');
-Port = 8080;
+Port = 6000;
 AccessLogFormat = 'Apache';
 
 function logHttpRequest(req, httpStatus) {

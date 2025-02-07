@@ -7,3 +7,4 @@ COPY ./index.html /usr/share/nginx/html/index.html
 COPY ./index.js /usr/share/nginx/html/index.js
 COPY ./styles.css /usr/share/nginx/html/styles.css
 RUN ls /usr/share/nginx/html
+EXPOSE 7000

@@ -4,5 +4,5 @@ LABEL maintainer="gnuhow"
 WORKDIR /home/node
 COPY . ./
 RUN ls
-EXPOSE 8080
+EXPOSE 6000
 CMD ["app.js"]
