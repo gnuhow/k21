@@ -232,7 +232,7 @@ resource "azurerm_container_app" "web" {
 
       env {
         name = "APP_URL"
-        value = azurerm_container_app.app.latest_revision_fqdn
+        value = join("", ["https://", azurerm_container_app.app.latest_revision_fqdn])
       }
     }
   }
