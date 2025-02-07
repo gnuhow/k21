@@ -10,6 +10,44 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+- stage: Containers
+  condition: eq(variables['doContainer'], true)
+  jobs:
+  - job: Containers
+    displayName: Containers
+    steps:
+    - task: Docker@2
+      displayName: Login to ACR
+      inputs:
+        command: login
+        containerRegistry: k21-registry
+
+    - task: Docker@2
+      displayName: Docker Build and Push App
+      inputs:
+        repository: app
+        Dockerfile: ./container/app/Dockerfile
+        containerRegistry: k21-registry
+        command: buildAndPush
+        tags: |
+          $(appVersion)
+
+    - task: Docker@2
+      displayName: Docker Build and Push nginx
+      inputs:
+        repository: web
+        Dockerfile: ./container/app/Dockerfile
+        containerRegistry: k21-registry
+        command: buildAndPush
+        tags: |
+          $(appVersion)
+
+    - task: Docker@2
+      displayName: Logout
+      inputs:
+        command: logout
+        containerRegistry: k21-registry
+
 stages:
 - stage: Terraform
   condition: eq(variables['doTerraform'], true)
@@ -102,41 +140,3 @@ stages:
         environmentServiceNameAzureRM: k21-devops
         workingDirectory: terraform
 
-
-- stage: Containers
-  condition: eq(variables['doContainer'], true)
-  jobs:
-  - job: Containers
-    displayName: Containers
-    steps:
-    - task: Docker@2
-      displayName: Login to ACR
-      inputs:
-        command: login
-        containerRegistry: k21-registry
-
-    - task: Docker@2
-      displayName: Docker Build and Push App
-      inputs:
-        repository: app
-        Dockerfile: ./container/app/Dockerfile
-        containerRegistry: k21-registry
-        command: buildAndPush
-        tags: |
-          $(appVersion)
-
-    - task: Docker@2
-      displayName: Docker Build and Push nginx
-      inputs:
-        repository: web
-        Dockerfile: ./container/app/Dockerfile
-        containerRegistry: k21-registry
-        command: buildAndPush
-        tags: |
-          $(appVersion)
-
-    - task: Docker@2
-      displayName: Logout
-      inputs:
-        command: logout
-        containerRegistry: k21-registry
