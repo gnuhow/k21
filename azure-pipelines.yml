@@ -2,7 +2,7 @@ variables:
   color: '\033[0;33m'
   doTerraform: true
   doContainer: false
-  appVersion: 'v0.0.3'
+  appVersion: 'v0.0.4'
   azureServiceConnection: k21-devops
 
 trigger:
@@ -38,7 +38,7 @@ stages:
       displayName: Docker Build and Push nginx
       inputs:
         repository: web
-        Dockerfile: ./container/app/Dockerfile
+        Dockerfile: ./container/web/Dockerfile
         containerRegistry: k21-registry
         command: buildAndPush
         tags: |
