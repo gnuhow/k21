@@ -1,7 +1,8 @@
 variables:
   color: '\033[0;33m'
-  doTerraform: true
-  doContainer: true
+  doUploadFiles: true
+  doContainer: false
+  doTerraform: false
   appVersion: 'v0.0.10'
   azureServiceConnection: k21-devops
 
@@ -10,6 +11,20 @@ trigger:
 
 pool:
   vmImage: ubuntu-latest
+
+
+stages:
+- stage: UploadFiles
+  condition: eq(variables['doUploadFiles'], true)
+  jobs:
+  - job: Upload
+    displayName: Upload Files for container volumes
+    steps:
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: $(azureServiceConnection)
+        scriptType: ps
+        scriptPath:
 
 stages:
 - stage: Containers
