@@ -2,8 +2,9 @@ let GameState = {};
 
 async function start() {
     console.log('Start pressed');
-    const url = 'http://localhost/start:6000' 
-    const request = new Request('url');
+    // const url = 'http://localhost/start:6000';
+    const url = '/start';
+    const request = new Request(url);
 
     const response = await fetch(request);
     if (!response.ok) {
