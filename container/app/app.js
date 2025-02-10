@@ -3,6 +3,9 @@ let http = require('http');
 Port = 6000;
 AccessLogFormat = 'Apache';
 
+// import { start } from game.js;
+const game = require('./game');
+
 function logHttpRequest(req, httpStatus) {
     let headers = req.headers;
     // console.dir(req);
@@ -32,11 +35,17 @@ function logHttpRequest(req, httpStatus) {
 
 
 http.createServer(function (req, res) {
-    if (req.method == 'GET' && req.url == '/') {
+    if (req.method == 'GET' && req.url == '/start') {
         httpStatus = 200;
         logHttpRequest(req, httpStatus);
-        res.writeHead(httpStatus, {'Content-Type': 'text/html'});
-        res.write('Get recieved');
+        res.writeHead(httpStatus, {'Content-Type': 'application/json'});
+        response = {
+            text: 'Successful response'
+        }
+        const playerCount = 1;
+        let gameState = game.start(playerCount);
+        gameState = game.deal(gameState);
+        res.write(JSON.stringify(gameState));
         res.end();
 
     } else if (req.method == 'POST' && req.url == '/') {

@@ -2,16 +2,29 @@ let GameState = {};
 
 async function start() {
     console.log('Start pressed');
+    const url = 'http://localhost/start:6000' 
+    const request = new Request('url');
+
+    const response = await fetch(request);
+    if (!response.ok) {
+        throw new Error(`Deal HTTP error, status: ${response.status}`);
+    };
+
+    let gameState = await response.json();
+    console.log(gameState);
+
     try {
-        const request = new Request('/start');
+        let url = '/start'
+        // const url = 'http://localhost/start:6000' 
+        const request = new Request('url');
 
         const response = await fetch(request);
         if (!response.ok) {
             throw new Error(`Deal HTTP error, status: ${response.status}`);
         };
 
-        GameState = await response.json();
-        console.log(dealJson);
+        let gameState = await response.json();
+        console.log(gameState);
     } catch (error) {
         console.error('Deal error');
         console.error(error.message);
