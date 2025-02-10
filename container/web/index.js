@@ -7,28 +7,28 @@ async function start() {
 
     const response = await fetch(request);
     if (!response.ok) {
-        throw new Error(`Deal HTTP error, status: ${response.status}`);
+        throw new Error(`Start HTTP error, status: ${response.status}`);
     };
 
     let gameState = await response.json();
     console.log(gameState);
 
-    try {
-        let url = '/start'
-        // const url = 'http://localhost/start:6000' 
-        const request = new Request('url');
+    // try {
+    //     let url = '/start'
+    //     // const url = 'http://localhost/start:6000' 
+    //     const request = new Request(url);
 
-        const response = await fetch(request);
-        if (!response.ok) {
-            throw new Error(`Deal HTTP error, status: ${response.status}`);
-        };
+    //     const response = await fetch(request);
+    //     if (!response.ok) {
+    //         throw new Error(`Deal HTTP error, status: ${response.status}`);
+    //     };
 
-        let gameState = await response.json();
-        console.log(gameState);
-    } catch (error) {
-        console.error('Deal error');
-        console.error(error.message);
-    };
+    //     let gameState = await response.json();
+    //     console.log(gameState);
+    // } catch (error) {
+    //     console.error('Deal error');
+    //     console.error(error.message);
+    // };
     return GameState;
 };
 
