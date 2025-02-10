@@ -2,7 +2,7 @@ variables:
   color: '\033[0;33m'
   doTerraform: true
   doContainer: true
-  appVersion: 'v0.0.8'
+  appVersion: 'v0.0.9'
   azureServiceConnection: k21-devops
 
 trigger:
