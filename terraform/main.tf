@@ -150,27 +150,28 @@ resource "azurerm_container_app_environment" "app" {
 }
 
 
-resource "azurerm_storage_account" "app" {
-  name                     = var.project_name_long
-  resource_group_name      = azurerm_resource_group.app.name
-  location                 = var.azure_region
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-  access_tier = "Hot"
+# resource "azurerm_storage_account" "app" {
+#   name                     = var.project_name_long
+#   resource_group_name      = azurerm_resource_group.app.name
+#   location                 = var.azure_region
+#   account_tier             = "Standard"
+#   account_replication_type = "LRS"
+#   access_tier = "Hot"
 
-  tags = {
-    project = var.project_name
-  }
-}
+#   tags = {
+#     project = var.project_name
+#   }
+# }
 
 
-resource "azurerm_storage_share" "app" {
-  name               = var.project_name_long
-  storage_account_id = azurerm_storage_account.app.id
-  quota              = 1  # GB of storage size
-  enabled_protocol = "NFS"
-  access_tier = "Hot"
-}
+# resource "azurerm_storage_share" "app" {
+#   name               = var.project_name_long
+#   # storage_account_id = azurerm_storage_account.app.id
+#   quota              = 1  # GB of storage size
+#   enabled_protocol = "NFS"
+#   access_tier = "Hot"
+
+# }
 
 
 resource "azurerm_container_app" "app" {
