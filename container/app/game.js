@@ -4,8 +4,9 @@ const Max16BitInt = 65535; // 2 ** 16 -1
 const DoTrueRandomShuffle = true;
 const PlayerCount = 1;
 const DeckCount = 1;
-const MinimumCards = 50;  // How many cards left before a reshuffle. 
+const MinimumCards = 30;  // How many cards left before a reshuffle. 
 const DealerHold = 14;  // Dealer holds at 14
+const DealerName = 'Dealer';
 
 const Deck = [
         { face: "2",    suit: "spade",      color: "black"  },
@@ -77,6 +78,10 @@ const Deck = [
 // const GameState = {
 //     deck: [],
 //     players: []
+//     misc:
+//         {
+
+//         }
 // }
 
 
@@ -169,9 +174,28 @@ function start(playerCount) {
         misc: {
             playerCount: playerCount,
             reshuffles: 0,
+            isHandOver: false,
         }
     };
+
+    const examplePlayer = {
+        name: DealerName,     // dealer is a reserved name
+        upCards:    [{ face: "A", suit: "club", color: "black"  }],
+        downCards:  [{ face: "A", suit: "club", color: "black"  }],
+        value: 5,           // total player hand value
+        status: "wait",     // wait - before player had their turn, 
+                            // ready - player turn finished, 
+                            // bust - player busted, 
+                            // blackjack - player gets 21 on the first hand.
+        isWinner: true,     // did the player win?
+        isDraw: false,      // did the player have a draw
+    }
+
     gameState = newDeck(gameState);
+    for (let playerNumber = 0; playerNumber < playerCount; playerNumber++) {
+        gameState.player[playerNumber].status = "wait";
+    }
+
     return gameState;
 }
 
@@ -200,7 +224,7 @@ function deal(gameState) {
         });
     }
     gameState.players.push({
-        name: "Dealer",
+        name: DealerName,
         upCards: [draw(gameState.deck)]
     });
     
@@ -248,24 +272,17 @@ function countHands(gameState) {
 }
 
 
-function getHandStatus(handValue) {
-    let status;
-    if (handValue < 21) {
-        status = 'ready';
-    } else if (handValue === 21) {
-        status = 'blackjack';
-    } else if (handValue > 21) {
-        status = 'bust';
-    }
-    return status;
-}
-
-
 function updatePlayerStatus(gameState, playerNumber) {
-    value = countHand(gameState.players[playerNumber].upCards, gameState.players[playerNumber].downCards);
+    let value = countHand(gameState.players[playerNumber].upCards, gameState.players[playerNumber].downCards);
     gameState.players[playerNumber].value = value;
 
-    const status = getHandStatus(value);
+    let status;
+    // default status of "wait"
+    if (value <= 21) {
+        status = 'ready';
+    } else if (value > 21) {
+        status = 'bust';
+    }
     gameState.players[playerNumber].status = status;
 
     return gameState;
@@ -278,13 +295,13 @@ function dealerTurn(gameState) {
     gameState = updatePlayerStatus(gameState, playerNumber);
 
     let value = gameState.players[playerNumber].value;
-    console.log(`playerNumber: ${playerNumber} value: ${value}`);
+    // console.log(`playerNumber: ${playerNumber} value: ${value}`);
 
     let doHit = false;
     for (const player of gameState.players) {
-        if ((player.name != 'dealer') && (player.status != 'bust') && (value < DealerHold)) {
+        if ((player.name != DealerName) && (player.status != 'bust') && (value < DealerHold)) {
             doHit = true;
-       }
+        }
     }
 
     if (doHit) {
@@ -300,9 +317,13 @@ function dealerTurn(gameState) {
 
 function endHand() {
     playerCount = 0;
-    for (const player of gameState.players) {
-        // todo        
-        playerCount++;
+    for (let playerNumber = 0; playerNumber < gameState.players.length; playerNumber++) {
+        // todo: reset player stuff
+    }
+
+    let dealerPlayerNumber = gameState.players.length - 1;
+    while (doEndRound && (gameState.player[dealerPlayerNumber].value < DealerHold)) {
+        gameState = dealerTurn(gameState);
     }
 
     if (gameState.deck.length < MinimumCards) {
@@ -312,18 +333,67 @@ function endHand() {
 }
 
 
-function checkRoundEnd(gameState) {
-    let doEnd = true;
+function checkWinner(gameState) {
+    console.log('check winner');    
+    let highestValue = 0;
+    let playerNumber = 0;
+    let winningPlayerNumber;
+    let isDraw = false;
+    gameState.misc.isHandOver = true;
+
+    // find highest value
     for (const player of gameState.players) {
-        if (player.status == "wait") {
-            doEnd = false;
+        if ((player.value > highestValue) && (player.status !== 'bust')) {
+            winningPlayerNumber = playerNumber;
+            highestValue = player.value;
+        }
+        playerNumber++;
+    }
+
+    // find draw
+    playerNumber = 0;
+    for (const player of gameState.players) {
+        if ((player.value === highestValue) && (player.status !== 'bust')) {
+            isDraw = true;
+            gameState.player[playerNumber].isDraw = true;
+            gameState.player[winningPlayerNumber].isDraw = true;
+        }
+        playerNumber++;
+    }
+
+    if (!(isDraw)) {
+        gameState.players[playerNumber].isWinner = true;
+    }
+
+    return gameState;
+}
+
+
+// A round ends when every player has either hit or held.
+function checkRoundEnd(gameState) {
+    console.log('check round end');
+    let doEndRound = true;
+    for (const player of gameState.players) {
+        if ((player.name != DealerName) && (player.status == "wait")) {
+            doEndRound = false;
         }
     }
-    if (doEnd) {
+
+    if (doEndRound) {
         gameState = dealerTurn(gameState);
-        // check for winner
-        // check for reshuffle
+        gameState = checkWinner(gameState);
+
+        // every player is reset to waiting after round end.
+        for (let playerNumber = 0; playerNumber < gameState.misc.playerCount; playerNumber++) {
+            gameState.player[playerNumber] = "wait";
+        }
+
+        if (gameState.misc.isHandOver) {
+            gameState = endHand(gameState);
+        }
     }
+
+    return gameState;
 }
 
 
@@ -332,7 +402,6 @@ function hit(gameState, playerNumber) {
     gameState.players[playerNumber].upCards.push(card);
     // gameState = countHands(gameState);
     gameState = updatePlayerStatus(gameState, playerNumber);
-    
     gameState = checkRoundEnd(gameState);
     return gameState;
 }
