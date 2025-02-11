@@ -168,7 +168,7 @@ resource "azurerm_storage_account" "app" {
 resource "azurerm_storage_share" "app" {
   name               = var.project_name_long
   storage_account_id = azurerm_storage_account.app.id
-  quota              = 1  # GB of storage size
+  quota              = 100  # GB of storage size
   enabled_protocol = "NFS"
   # access_tier = "Hot"
 }
