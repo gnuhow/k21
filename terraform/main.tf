@@ -170,7 +170,7 @@ resource "azurerm_storage_share" "app" {
   storage_account_id = azurerm_storage_account.app.id
   quota              = 1  # GB of storage size
   enabled_protocol = "NFS"
-  access_tier = "Hot"
+  # access_tier = "Hot"
 }
 
 
