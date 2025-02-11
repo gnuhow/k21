@@ -1,0 +1,45 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string"
+        },
+        "fileShareName": {
+            "type": "string"
+        },
+        "rootSquash": {
+            "type": "string"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "name": "[parameters('fileShareName')]",
+            "type": "Microsoft.FileShares/fileShares",
+            "apiVersion": "2023-01-01-preview",
+            "location": "[parameters('location')]",
+            "properties": {
+                "shareName": "[parameters('fileShareName')]",
+                "protocols": [
+                    "NFS"
+                ],
+                "provisionedStorageGiB": "1",
+                "publicEndpointNetworkRuleSet": {
+                    "virtualNetworkRules": []
+                },
+                "redundancy": "Local",
+                "tier": "SSD",
+                "nfsProtocolProperties": {
+                    "rootSquash": "[parameters('rootSquash')]"
+                }
+            },
+            "dependsOn": [],
+            "tags": {
+                "project": "k21",
+                "deploy": "manual"
+            }
+        }
+    ],
+    "outputs": {}
+}
