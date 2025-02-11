@@ -154,7 +154,7 @@ resource "azurerm_storage_account" "app" {
   name                     = join("", [var.project_name, "filestorage"])
   resource_group_name      = azurerm_resource_group.app.name
   location                 = var.azure_region
-  account_tier             = "Standard"
+  account_tier             = "Premium"
   account_replication_type = "LRS"
   access_tier = "Hot"
   account_kind = "FileStorage"
