@@ -3,7 +3,7 @@ variables:
   doUploadFiles: false
   doContainer: false
   doTerraform: true
-  doDestroy: true
+  doDestroy: false
   appVersion: 'v0.0.10'
   azureServiceConnection: k21-devops
 

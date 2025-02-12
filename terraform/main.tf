@@ -231,114 +231,114 @@ resource "azurerm_container_app_environment" "app" {
 # }
 
 
-resource "azurerm_container_app" "app" {
-  name                         = join("", [var.project_name, "app"])
-  resource_group_name          = azurerm_resource_group.app.name
-  container_app_environment_id = azurerm_container_app_environment.app.id
-  revision_mode                = "Single"
+# resource "azurerm_container_app" "app" {
+#   name                         = join("", [var.project_name, "app"])
+#   resource_group_name          = azurerm_resource_group.app.name
+#   container_app_environment_id = azurerm_container_app_environment.app.id
+#   revision_mode                = "Single"
 
-  identity {
-    type         = "UserAssigned"
-    identity_ids = [azurerm_user_assigned_identity.app.id]
-  }
+#   identity {
+#     type         = "UserAssigned"
+#     identity_ids = [azurerm_user_assigned_identity.app.id]
+#   }
 
-  registry {
-    identity = azurerm_user_assigned_identity.app.id
-    server   = var.acr_url
-  }
+#   registry {
+#     identity = azurerm_user_assigned_identity.app.id
+#     server   = var.acr_url
+#   }
 
-  template {
-    max_replicas = 1
-    min_replicas = 1
+#   template {
+#     max_replicas = 1
+#     min_replicas = 1
 
-    container {
-      name   = "app"
-      image  = join("", [var.acr_url, "/app", ":", var.app_version])
-      cpu    = 0.5
-      memory = "1Gi"
-    }
-  }
+#     container {
+#       name   = "app"
+#       image  = join("", [var.acr_url, "/app", ":", var.app_version])
+#       cpu    = 0.5
+#       memory = "1Gi"
+#     }
+#   }
 
-  ingress {
-    allow_insecure_connections = false
-    external_enabled = false
-    target_port                = 6000
-    transport                  = "http"
+#   ingress {
+#     allow_insecure_connections = false
+#     external_enabled = false
+#     target_port                = 6000
+#     transport                  = "http"
 
-    traffic_weight {
-      label           = "app"
-      latest_revision = true
-      percentage      = 100
-    }
+#     traffic_weight {
+#       label           = "app"
+#       latest_revision = true
+#       percentage      = 100
+#     }
 
-    # ip_security_restriction {
-    #   name             = "allowDevUser"
-    #   action           = "Allow"
-    #   description      = "Allow traffic from my location."
-    #   ip_address_range = var.my_cidr
-    # }
-  }
+#     # ip_security_restriction {
+#     #   name             = "allowDevUser"
+#     #   action           = "Allow"
+#     #   description      = "Allow traffic from my location."
+#     #   ip_address_range = var.my_cidr
+#     # }
+#   }
 
-  tags = {
-    project = var.project_name
-  }
-}
+#   tags = {
+#     project = var.project_name
+#   }
+# }
 
 
-resource "azurerm_container_app" "web" {
-  name                         = join("", [var.project_name, "web"])
-  resource_group_name          = azurerm_resource_group.app.name
-  container_app_environment_id = azurerm_container_app_environment.app.id
-  revision_mode                = "Single"
+# resource "azurerm_container_app" "web" {
+#   name                         = join("", [var.project_name, "web"])
+#   resource_group_name          = azurerm_resource_group.app.name
+#   container_app_environment_id = azurerm_container_app_environment.app.id
+#   revision_mode                = "Single"
 
-  identity {
-    type         = "UserAssigned"
-    identity_ids = [azurerm_user_assigned_identity.app.id]
-  }
+#   identity {
+#     type         = "UserAssigned"
+#     identity_ids = [azurerm_user_assigned_identity.app.id]
+#   }
 
-  registry {
-    identity = azurerm_user_assigned_identity.app.id
-    server   = var.acr_url
-  }
+#   registry {
+#     identity = azurerm_user_assigned_identity.app.id
+#     server   = var.acr_url
+#   }
 
-  template {
-    max_replicas = 1
-    min_replicas = 1
+#   template {
+#     max_replicas = 1
+#     min_replicas = 1
 
-    container {
-      name   = "web"
-      image  = join("", [var.acr_url, "/web", ":", var.app_version])
-      cpu    = 0.5
-      memory = "1Gi"
+#     container {
+#       name   = "web"
+#       image  = join("", [var.acr_url, "/web", ":", var.app_version])
+#       cpu    = 0.5
+#       memory = "1Gi"
 
-      env {
-        name = "APP_URL"
-        value = var.app_url
-      }
-    }
-  }
+#       env {
+#         name = "APP_URL"
+#         value = var.app_url
+#       }
+#     }
+#   }
 
-  ingress {
-    allow_insecure_connections = false
-    external_enabled           = true
-    target_port                = 7000
-    transport                  = "http"
+#   ingress {
+#     allow_insecure_connections = false
+#     external_enabled           = true
+#     target_port                = 7000
+#     transport                  = "http"
 
-    traffic_weight {
-      label           = "web"
-      latest_revision = true
-      percentage      = 100
-    }
+#     traffic_weight {
+#       label           = "web"
+#       latest_revision = true
+#       percentage      = 100
+#     }
 
-    ip_security_restriction {
-      name             = "allowDevUser"
-      action           = "Allow"
-      description      = "Allow traffic from my location."
-      ip_address_range = var.my_cidr
-    }
-  }
+#     ip_security_restriction {
+#       name             = "allowDevUser"
+#       action           = "Allow"
+#       description      = "Allow traffic from my location."
+#       ip_address_range = var.my_cidr
+#     }
+#   }
 
-  tags = {
-    project = var.project_name
-  }
-}
+#   tags = {
+#     project = var.project_name
+#   }
+# }
