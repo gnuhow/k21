@@ -153,7 +153,7 @@ resource "azurerm_container_app_environment" "app" {
 resource "azurerm_virtual_network" "app" {
   name = var.project_name_long
   location = var.azure_region
-  resource_group_name = azurerm_resource_group.app
+  resource_group_name = azurerm_resource_group.app.name
   address_space = ["10.0.0.0/16"]
   
   subnet {
