@@ -1,8 +1,9 @@
 variables:
   color: '\033[0;33m'
   doUploadFiles: false
-  doContainer: true
+  doContainer: false
   doTerraform: true
+  doDestroy: true
   appVersion: 'v0.0.10'
   azureServiceConnection: k21-devops
 
@@ -71,7 +72,6 @@ stages:
   displayName: Terraform
   condition: eq(variables['doTerraform'], true)
   variables:
-    doDestroy: false
     logLevel: ERROR
     terraformVersion: '1.10.5'
     workingDirectory: terraform
