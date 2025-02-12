@@ -150,51 +150,80 @@ resource "azurerm_container_app_environment" "app" {
 }
 
 
-resource "azurerm_virtual_network" "app" {
-  name = var.project_name_long
-  location = var.azure_region
-  resource_group_name = azurerm_resource_group.app.name
-  address_space = ["10.0.0.0/16"]
+# I was trying to add volume mounts, but they aren't supported by terraform.
+# resource "azurerm_virtual_network" "app" {
+#   name = var.project_name_long
+#   location = var.azure_region
+#   resource_group_name = azurerm_resource_group.app.name
+#   address_space = ["10.0.0.0/16"]
   
-  subnet {
-    name = "subnet1"
-    address_prefixes = ["10.0.1.0/24"]
-  }
+#   subnet {
+#     name = "subnet1"
+#     address_prefixes = ["10.0.1.0/24"]
+#   }
 
-  subnet {
-    name = "subnet2"
-    address_prefixes = ["10.0.2.0/24"]
-  }
-
-
-  tags = {
-    project = var.project_name
-  }
-}
+#   subnet {
+#     name = "subnet2"
+#     address_prefixes = ["10.0.2.0/24"]
+#   }
 
 
-resource "azurerm_storage_account" "app" {
-  name                     = join("", [var.project_name, "filestorage"])
-  resource_group_name      = azurerm_resource_group.app.name
-  location                 = var.azure_region
-  account_tier             = "Premium"
-  account_replication_type = "LRS"
-  access_tier = "Hot"
-  account_kind = "FileStorage"
-
-  tags = {
-    project = var.project_name
-  }
-}
+#   tags = {
+#     project = var.project_name
+#   }
+# }
 
 
-resource "azurerm_storage_share" "app" {
-  name               = var.project_name_long
-  storage_account_id = azurerm_storage_account.app.id
-  quota              = 100  # GB of storage size
-  enabled_protocol = "NFS"
-  # access_tier = "Hot"
-}
+# resource "azurerm_application_security_group" "app" {
+#   name                = join("", [var.project_name, "filestorage"])
+#   location            = var.azure_region
+#   resource_group_name = azurerm_resource_group.app.name
+
+#   tags = {
+#     project = var.project_name
+#   }
+# }
+
+
+# resource "azurerm_subnet_service_endpoint_storage_policy" "app" {
+#   name                = var.project_name_long
+#   resource_group_name = azurerm_resource_group.app.name
+#   location            = var.azure_region
+
+#   definition {
+#     name        = "fileStorage"
+#     description = "Allow File storage"
+#     service     = "Microsoft.Storage"
+#     service_resources = [
+#       azurerm_resource_group.app.id,
+#       azurerm_storage_account.app.id
+#     ]
+#   }
+# }
+
+
+# resource "azurerm_storage_account" "app" {
+#   name                     = join("", [var.project_name, "filestorage"])
+#   resource_group_name      = azurerm_resource_group.app.name
+#   location                 = var.azure_region
+#   account_tier             = "Premium"
+#   account_replication_type = "LRS"
+#   access_tier = "Hot"
+#   account_kind = "FileStorage"
+
+#   tags = {
+#     project = var.project_name
+#   }
+# }
+
+
+# resource "azurerm_storage_share" "app" {
+#   name               = var.project_name_long
+#   storage_account_id = azurerm_storage_account.app.id
+#   quota              = 100  # GB of storage size
+#   enabled_protocol = "NFS"
+#   # access_tier = "Hot"
+# }
 
 
 resource "azurerm_container_app" "app" {
