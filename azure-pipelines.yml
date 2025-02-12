@@ -2,8 +2,8 @@ variables:
   color: '\033[0;33m'
   doUploadFiles: false
   doContainer: false
-  doTerraform: true
-  doDestroy: true
+  doTerraform: false
+  doDestroy: false
   appVersion: 'v0.0.10'
   azureServiceConnection: k21-devops
 
@@ -121,16 +121,16 @@ stages:
         environmentServiceNameAzureRM: $(azureServiceConnection)
         workingDirectory: $(workingDirectory)
 
-    # - task: TerraformTaskV4@4
-    #   name: terraformPlanDestroy
-    #   displayName: Terraform Plan for Destruction
-    #   condition: eq(variables['doDestroy'], true)
-    #   inputs:
-    #     provider: azurerm
-    #     command: plan
-    #     commandOptions: '-destroy -out main.tfplan'
-    #     environmentServiceNameAzureRM: $(azureServiceConnection)
-    #     workingDirectory: $(workingDirectory)
+    - task: TerraformTaskV4@4
+      name: terraformPlanDestroy
+      displayName: Terraform Plan for Destruction
+      condition: eq(variables['doDestroy'], true)
+      inputs:
+        provider: azurerm
+        command: plan
+        commandOptions: '-destroy -out main.tfplan'
+        environmentServiceNameAzureRM: $(azureServiceConnection)
+        workingDirectory: $(workingDirectory)
 
     # Only runs if the 'terraformPlan' task has detected changes the in state.
     - task: TerraformTaskV4@4
