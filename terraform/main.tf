@@ -150,6 +150,29 @@ resource "azurerm_container_app_environment" "app" {
 }
 
 
+resource "azurerm_virtual_network" "app" {
+  name = ""
+  location = var.azure_region
+  resource_group_name = azurerm_resource_group.app
+  address_space = ["10.0.0.0/16"]
+  
+  subnet {
+    name = "subnet1"
+    address_prefixes = ["10.0.1.0/24"]
+  }
+
+  subnet {
+    name = "subnet2"
+    address_prefixes = ["10.0.2.0/24"]
+  }
+
+
+  tags = {
+    project = var.project_name
+  }
+}
+
+
 resource "azurerm_storage_account" "app" {
   name                     = join("", [var.project_name, "filestorage"])
   resource_group_name      = azurerm_resource_group.app.name
