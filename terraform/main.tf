@@ -53,6 +53,11 @@ variable "app_version" {
 }
 
 
+variable "app_url" {
+  type = string
+}
+
+
 variable "my_cidr" {
   type = string
 }
@@ -308,7 +313,7 @@ resource "azurerm_container_app" "web" {
 
       env {
         name = "APP_URL"
-        value = join("", ["https://", azurerm_container_app.app.latest_revision_fqdn])
+        value = var.app_url
       }
     }
   }

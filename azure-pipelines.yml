@@ -2,7 +2,7 @@ variables:
   color: '\033[0;33m'
   doUploadFiles: false
   doContainer: true
-  doTerraform: false
+  doTerraform: true
   appVersion: 'v0.0.10'
   azureServiceConnection: k21-devops
 
@@ -117,7 +117,7 @@ stages:
       inputs:
         provider: azurerm
         command: plan
-        commandOptions: '-out main.tfplan -var acr_url=$(ACR_URL) -var app_version=$(appVersion) -var subscription_id=$(AZURE_SUBSCRIPTION_ID) -var my_cidr=$(MY_CIDR)' # subscription_id required for local compatibility.
+        commandOptions: '-out main.tfplan -var acr_url=$(ACR_URL) -var app_url=$(APP_URL) -var app_version=$(appVersion) -var subscription_id=$(AZURE_SUBSCRIPTION_ID) -var my_cidr=$(MY_CIDR)' # subscription_id required for local compatibility.
         environmentServiceNameAzureRM: $(azureServiceConnection)
         workingDirectory: $(workingDirectory)
 
