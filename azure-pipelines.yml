@@ -14,17 +14,18 @@ pool:
 
 
 stages:
-- stage: UploadFiles
-  condition: eq(variables['doUploadFiles'], true)
-  jobs:
-  - job: Upload
-    displayName: Upload Files for container volumes
-    steps:
-    - task: AzureCLI@2
-      inputs:
-        azureSubscription: $(azureServiceConnection)
-        scriptType: ps
-        scriptPath: script/uploadFiles.ps1
+# meant for using container storage volumes
+# - stage: UploadFiles
+#   condition: eq(variables['doUploadFiles'], true)
+#   jobs:
+#   - job: Upload
+#     displayName: Upload Files for container volumes
+#     steps:
+#     - task: AzureCLI@2
+#       inputs:
+#         azureSubscription: $(azureServiceConnection)
+#         scriptType: ps
+#         scriptPath: script/uploadFiles.ps1
 
 
 - stage: Containers
