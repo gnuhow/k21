@@ -256,7 +256,7 @@ resource "azurerm_container_app" "app" {
 
   ingress {
     allow_insecure_connections = false
-    external_enabled = true
+    external_enabled = false
     target_port                = 6000
     transport                  = "http"
 
@@ -266,12 +266,12 @@ resource "azurerm_container_app" "app" {
       percentage      = 100
     }
 
-    ip_security_restriction {
-      name             = "allowDevUser"
-      action           = "Allow"
-      description      = "Allow traffic from my location."
-      ip_address_range = var.my_cidr
-    }
+    # ip_security_restriction {
+    #   name             = "allowDevUser"
+    #   action           = "Allow"
+    #   description      = "Allow traffic from my location."
+    #   ip_address_range = var.my_cidr
+    # }
   }
 
   tags = {
