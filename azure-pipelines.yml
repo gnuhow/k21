@@ -1,8 +1,8 @@
 variables:
   color: '\033[0;33m'
   doUploadFiles: false
-  doContainer: true
-  doTerraform: false
+  doContainer: false
+  doTerraform: true
   appVersion: 'v0.0.10'
   azureServiceConnection: k21-devops
 
